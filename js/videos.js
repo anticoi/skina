@@ -55,6 +55,15 @@ const videoData = [
         embedUrl: null,
         thumbnail: null,
         description: 'Banda La Skina llega a Golden Music - Música en vivo desde las 22:00 hrs'
+    },
+    {
+        id: 7,
+        type: 'local',
+        title: 'La Skina - Show en Vivo',
+        url: 'videos/skina_video2.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'Otra presentación de La Skina en vivo'
     }
 ];
 
