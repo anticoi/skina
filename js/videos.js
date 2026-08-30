@@ -42,7 +42,7 @@ const videoData = [
         id: 5,
         type: 'facebook',
         title: 'Facebook Reel',
-        url: 'https://www.facebook.com/reel/28192891803737665',
+        url: 'https://www.facebook.com/profile.php?id=61557197311912',
         embedUrl: null, // Facebook reels don't support direct embedding
         thumbnail: null,
         description: 'Síguenos en Facebook para más contenido'
