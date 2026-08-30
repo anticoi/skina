@@ -69,16 +69,16 @@ function renderVideos() {
         if (video.type === 'local') {
             // Local video file - use HTML5 video player
             videoCard.innerHTML = `
-                <div class="video-container">
+                <div class="video-container bg-black flex items-center justify-center">
                     <video 
                         src="${video.url}" 
                         title="${video.title}"
                         controls
                         preload="metadata"
-                        class="absolute top-0 left-0 w-full h-full object-cover"
+                        class="max-w-full max-h-full object-contain"
                     ></video>
                 </div>
-                <div class="p-6">
+                <div class="p-6 text-center">
                     <h3 class="text-xl font-bold text-gold mb-2">${video.title}</h3>
                     <p class="text-gray-400">${video.description}</p>
                 </div>
