@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (if using Node.js for local development)
+node_modules/
+package-lock.json
+
+# Build files (if using build tools)
+dist/
+build/
