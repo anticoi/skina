@@ -200,14 +200,21 @@ function createChatbot() {
         </div>
         <div id="chatbot-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
             <div style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); padding: 12px 16px; border-radius: 12px 12px 12px 4px; color: #e0e0e0; font-size: 14px; line-height: 1.5;">
-                ¡Hola! Soy el asistente virtual de La Skina 🎵. Puedo ayudarte con:
-                <ul style="margin-top: 8px; padding-left: 20px; color: #00f3ff;">
-                    <li>Reservas y cotizaciones</li>
-                    <li>Repertorio musical</li>
-                    <li>Tipos de eventos</li>
-                    <li>Contacto y redes sociales</li>
-                </ul>
-                ¿En qué te puedo ayudar?
+                ¡Hola! Soy el asistente virtual de La Skina 🎵. ¿En qué te puedo ayudar?
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <button class="chatbot-quick-btn" data-msg="Reservas y cotizaciones" style="background: rgba(255, 0, 127, 0.15); border: 1px solid rgba(255, 0, 127, 0.4); border-radius: 8px; padding: 8px 14px; color: #ff007f; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; transition: all 0.2s ease;">
+                    📅 Reservas y cotizaciones
+                </button>
+                <button class="chatbot-quick-btn" data-msg="Repertorio musical" style="background: rgba(0, 243, 255, 0.15); border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 8px; padding: 8px 14px; color: #00f3ff; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; transition: all 0.2s ease;">
+                    🎵 Repertorio musical
+                </button>
+                <button class="chatbot-quick-btn" data-msg="Tipos de eventos" style="background: rgba(157, 0, 255, 0.15); border: 1px solid rgba(157, 0, 255, 0.4); border-radius: 8px; padding: 8px 14px; color: #9d00ff; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; transition: all 0.2s ease;">
+                    🎉 Tipos de eventos
+                </button>
+                <button class="chatbot-quick-btn" data-msg="Contacto y redes sociales" style="background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.4); border-radius: 8px; padding: 8px 14px; color: #25D366; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; transition: all 0.2s ease;">
+                    📞 Contacto y redes sociales
+                </button>
             </div>
         </div>
         <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px;">
@@ -249,6 +256,22 @@ function createChatbot() {
     // WhatsApp button
     document.getElementById('chatbot-whatsapp').addEventListener('click', () => {
         executeAction('whatsapp');
+    });
+
+    // Quick reply buttons
+    document.querySelectorAll('.chatbot-quick-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const msg = this.dataset.msg;
+            // Simular envío del mensaje
+            addMessage(msg, 'user');
+            // Respuesta del bot
+            setTimeout(() => {
+                const { response, action } = findResponse(msg);
+                addMessage(response, 'bot', action);
+            }, 500);
+        });
+        btn.onmouseover = () => { btn.style.transform = 'translateX(4px)'; };
+        btn.onmouseout = () => { btn.style.transform = 'translateX(0)'; };
     });
 
     // Send message
