@@ -6,6 +6,7 @@
     <title>La Skina - Música Ochentera y del Recuerdo</title>
     <meta name="description" content="La mejor música ochentera y del recuerdo con músicos de gran trayectoria. Rock, Pop, Baladas y Ritmos de época.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -465,6 +466,18 @@
                 console.error('Error cargando hero_config.json:', e);
             }
         })();
+    </script>
+    <script>
+        // Netlify Identity - redirect to admin after login
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
