@@ -46,6 +46,15 @@ const videoData = [
         embedUrl: null, // Facebook reels don't support direct embedding
         thumbnail: null,
         description: 'Síguenos en Facebook para más contenido'
+    },
+    {
+        id: 6,
+        type: 'local',
+        title: 'La Skina en Golden Music',
+        url: 'videos/skina_golden_music.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'Banda La Skina llega a Golden Music - Música en vivo desde las 22:00 hrs'
     }
 ];
 
@@ -57,7 +66,24 @@ function renderVideos() {
         const videoCard = document.createElement('div');
         videoCard.className = 'bg-gray-900 rounded-2xl overflow-hidden border border-gold/20 card-hover';
         
-        if (video.type === 'facebook') {
+        if (video.type === 'local') {
+            // Local video file - use HTML5 video player
+            videoCard.innerHTML = `
+                <div class="video-container">
+                    <video 
+                        src="${video.url}" 
+                        title="${video.title}"
+                        controls
+                        preload="metadata"
+                        class="absolute top-0 left-0 w-full h-full object-cover"
+                    ></video>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gold mb-2">${video.title}</h3>
+                    <p class="text-gray-400">${video.description}</p>
+                </div>
+            `;
+        } else if (video.type === 'facebook') {
             // Facebook Reel - Show button/link instead of embed
             videoCard.innerHTML = `
                 <div class="p-6">
