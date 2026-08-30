@@ -155,6 +155,7 @@
                     <a href="#multimedia" class="nav-link text-gray-300 hover:text-gold transition-colors">Videos</a>
                     <a href="#galeria" class="nav-link text-gray-300 hover:text-gold transition-colors">Galería</a>
                     <a href="#servicios" class="nav-link text-gray-300 hover:text-gold transition-colors">Servicios</a>
+                    <a href="#calendario" class="nav-link text-gray-300 hover:text-gold transition-colors">Calendario</a>
                     <a href="#contacto" class="nav-link text-gray-300 hover:text-gold transition-colors">Contacto</a>
                 </div>
                 <button id="mobile-menu-btn" class="md:hidden text-gold">
@@ -172,6 +173,7 @@
                 <a href="#multimedia" class="block py-2 text-gray-300 hover:text-gold">Videos</a>
                 <a href="#galeria" class="block py-2 text-gray-300 hover:text-gold">Galería</a>
                 <a href="#servicios" class="block py-2 text-gray-300 hover:text-gold">Servicios</a>
+                <a href="#calendario" class="block py-2 text-gray-300 hover:text-gold">Calendario</a>
                 <a href="#contacto" class="block py-2 text-gray-300 hover:text-gold">Contacto</a>
             </div>
         </div>
@@ -354,6 +356,18 @@
         </div>
     </section>
 
+    <!-- Calendario Section -->
+    <section id="calendario" class="py-20 bg-[#0d081d]">
+        <div class="section-divider mb-20"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gold mb-4">Calendario de Reservas</h2>
+                <p class="text-gray-400 text-lg">Consulta nuestra disponibilidad y próximos eventos</p>
+            </div>
+            <div id="calendar-container"></div>
+        </div>
+    </section>
+
     <!-- Contacto Section -->
     <section id="contacto" class="py-20 bg-[#160f2e]">
         <div class="section-divider mb-20"></div>
@@ -452,6 +466,7 @@
     <script src="js/gallery.js"></script>
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
+    <script src="js/calendar.js"></script>
     <script>
         // Load hero configuration from hero_config.json
         (async function loadHeroConfig() {
