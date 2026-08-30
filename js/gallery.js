@@ -4,138 +4,144 @@
 const galleryData = [
     {
         id: 1,
+        filename: 'WhatsApp Image 2026-08-29 at 18.40.26.jpeg',
+        title: 'Nueva Imagen',
+        description: 'Momento especial de La Skina'
+    },
+    {
+        id: 2,
         filename: '469395620_122184445220239910_1237380260831878928_n.jpg',
         title: 'La Skina en Vivo',
         description: 'Momento especial en nuestra presentación'
     },
     {
-        id: 2,
+        id: 3,
         filename: '469398432_122184447542239910_8156151367024669384_n.jpg',
         title: 'En Escenario',
         description: 'La energía del escenario'
     },
     {
-        id: 3,
+        id: 4,
         filename: '469404361_122184447356239910_9144323421152256669_n.jpg',
         title: 'Show Intenso',
         description: 'Una presentación llena de energía'
     },
     {
-        id: 4,
+        id: 5,
         filename: '469479252_122184447614239910_7065550302034853732_n.jpg',
         title: 'Conexión Musical',
         description: 'La magia de la música en vivo'
     },
     {
-        id: 5,
+        id: 6,
         filename: '469488625_122184447182239910_732392003030224490_n.jpg',
         title: 'Músicos Profesionales',
         description: 'La experiencia de nuestros integrantes'
     },
     {
-        id: 6,
+        id: 7,
         filename: '469513779_122184447362239910_4794825018769550943_n.jpg',
         title: 'Noche de Éxitos',
         description: 'Los clásicos que marcaron época'
     },
     {
-        id: 7,
+        id: 8,
         filename: '469538389_122184447392239910_5277188833841314977_n.jpg',
         title: 'Público Aplaudiendo',
         description: 'La respuesta del público'
     },
     {
-        id: 8,
+        id: 9,
         filename: '469593245_122184447398239910_983857437660213386_n.jpg',
         title: 'Momento Único',
         description: 'Capturando la esencia del show'
     },
     {
-        id: 9,
+        id: 10,
         filename: '469612174_122184447722239910_4481794784412899084_n.jpg',
         title: 'Fiesta Musical',
         description: 'Celebrando con la mejor música'
     },
     {
-        id: 10,
+        id: 11,
         filename: '469636266_122184447386239910_4745816013261134059_n.jpg',
         title: 'Pasión Escénica',
         description: 'La pasión en cada nota'
     },
     {
-        id: 11,
+        id: 12,
         filename: '469706554_122184446942239910_6207900592258326471_n.jpg',
         title: 'Gran Final',
         description: 'Cerrando con fuerza'
     },
     {
-        id: 12,
+        id: 13,
         filename: '469816806_122184447338239910_7861082708948405390_n.jpg',
         title: 'Entre Amigos',
         description: 'La Skina compartiendo música'
     },
     {
-        id: 13,
+        id: 14,
         filename: '487269549_9653302754708134_4256586824943829794_n.jpg',
         title: 'Ensayo de Banda',
         description: 'Preparando nuestro repertorio'
     },
     {
-        id: 14,
+        id: 15,
         filename: '499914579_23863857386559433_6113977968756069342_n.jpg',
         title: 'Concierto Especial',
         description: 'Una noche inolvidable'
     },
     {
-        id: 15,
+        id: 16,
         filename: '499918874_23863857399892765_6654105899367588552_n.jpg',
         title: 'Músicos en Acción',
         description: 'La energía de nuestros músicos'
     },
     {
-        id: 16,
+        id: 17,
         filename: '499922108_23863857226559449_3772309000784436792_n.jpg',
         title: 'Público Disfrutando',
         description: 'Conectando con la audiencia'
     },
     {
-        id: 17,
+        id: 18,
         filename: '499925739_23863857506559421_802605445917947470_n.jpg',
         title: 'Escena Principal',
         description: 'Dominando el escenario'
     },
     {
-        id: 18,
+        id: 19,
         filename: '499928966_23863857233226115_2727424852141613921_n.jpg',
         title: 'Entre Canciones',
         description: 'Momentos de conexión'
     },
     {
-        id: 19,
+        id: 20,
         filename: '499934800_23863857243226114_7222860140332447218_n.jpg',
         title: 'Final del Show',
         description: 'Cerrando con broche de oro'
     },
     {
-        id: 20,
+        id: 21,
         filename: '654178533_18443387599118736_8155461647070952870_n.jpeg',
         title: 'Backstage',
         description: 'Detrás de cámaras'
     },
     {
-        id: 21,
+        id: 22,
         filename: '696134418_18452959573118736_5137224853568921927_n.jpeg',
         title: 'Preparativos',
         description: 'Listos para el show'
     },
     {
-        id: 22,
+        id: 23,
         filename: '719813244_18458188744118736_788835206785703804_n.jpeg',
         title: 'Celebración',
         description: 'Festejando la música'
     },
     {
-        id: 23,
+        id: 24,
         filename: '719899700_18458188729118736_1627394192383343192_n.jpeg',
         title: 'Grupo Completo',
         description: 'La Skina unida'
