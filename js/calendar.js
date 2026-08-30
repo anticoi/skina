@@ -8,7 +8,7 @@ const calendarEvents = {
     '2026-09-19': { title: 'Golden Music', location: 'Golden Music - Av. Irarrázaval 1951, Ñuñoa', type: 'public' }
 };
 
-// Generar todos los sábados pasados de 2026 como histórico
+// Generar todos los sábados pasados de 2026 como histórico en Golden Music
 const pastSaturdays = {};
 (function generatePastSaturdays() {
     const today = new Date(2026, 7, 30); // 30 de agosto de 2026
@@ -17,7 +17,7 @@ const pastSaturdays = {};
         if (d.getDay() === 6) { // Sábado
             const key = formatDateKey(d);
             if (!calendarEvents[key]) {
-                pastSaturdays[key] = { title: 'Ocupado', location: '', type: 'past' };
+                pastSaturdays[key] = { title: 'Golden Music', location: 'Golden Music - Av. Irarrázaval 1951, Ñuñoa', type: 'past' };
             }
         }
         d.setDate(d.getDate() + 1);
@@ -108,11 +108,12 @@ function renderCalendar() {
                 extraHtml = '<div class="w-1.5 h-1.5 bg-[#9d00ff] rounded-full mx-auto mt-0.5"></div>';
             }
         }
-        // Sábados pasados (histórico)
+        // Sábados pasados (histórico - Golden Music)
         else if (pastSaturdays[dateKey]) {
-            bgClass = 'bg-gray-700/30 border border-gray-700/40';
-            dayClass = 'text-gray-600 line-through';
-            extraHtml = '<div class="w-1.5 h-1.5 bg-gray-600 rounded-full mx-auto mt-0.5"></div>';
+            clickable = true;
+            bgClass = 'bg-[#ff007f]/10 border border-[#ff007f]/30';
+            dayClass = 'text-[#ff007f]/60';
+            extraHtml = '<div class="w-1.5 h-1.5 bg-[#ff007f]/40 rounded-full mx-auto mt-0.5"></div>';
         }
         // Sábados futuros disponibles
         else if (isSaturday && !isPast) {
@@ -150,8 +151,8 @@ function renderCalendar() {
                 <span class="text-gray-400">Disponible</span>
             </div>
             <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-gray-700/40 border border-gray-700/50 rounded"></div>
-                <span class="text-gray-400">Ocupado (Histórico)</span>
+                <div class="w-3 h-3 bg-[#ff007f]/40 border border-[#ff007f]/50 rounded"></div>
+                <span class="text-gray-400">Golden Music (Histórico)</span>
             </div>
         </div>
     `;
@@ -220,7 +221,7 @@ function renderCalendar() {
     document.querySelectorAll('.cal-day').forEach(day => {
         day.addEventListener('click', function() {
             const dateKey = this.dataset.date;
-            const event = calendarEvents[dateKey];
+            const event = calendarEvents[dateKey] || pastSaturdays[dateKey];
             if (event) {
                 showEventModal(dateKey, event);
             }
@@ -232,8 +233,8 @@ function showEventModal(dateKey, event) {
     const [y, m, d] = dateKey.split('-');
     const eventDate = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
     const dayName = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][eventDate.getDay()];
-    const typeColor = event.type === 'public' ? '#ff007f' : '#9d00ff';
-    const typeLabel = event.type === 'public' ? 'Evento Público' : 'Evento Privado';
+    const typeColor = event.type === 'private' ? '#9d00ff' : '#ff007f';
+    const typeLabel = event.type === 'private' ? 'Evento Privado' : event.type === 'past' ? 'Evento Realizado' : 'Evento Público';
 
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black/80 z-[10000] flex items-center justify-center p-4';
@@ -244,7 +245,9 @@ function showEventModal(dateKey, event) {
                 <h3 class="font-display text-3xl font-bold text-gold mb-2">${event.title}</h3>
                 <p class="text-gray-300 text-lg mb-1">${dayName} ${d} de ${monthNames[parseInt(m) - 1]} ${y}</p>
                 ${event.location ? `<p class="text-gray-400 text-sm mb-6">${event.location}</p>` : '<div class="mb-6"></div>'}
-                ${event.type === 'public' ? `
+                ${event.type === 'past' ? `
+                    <p class="text-gray-500 text-sm">¡Gracias por acompañarnos en esta presentación!</p>
+                ` : event.type === 'public' ? `
                     <a href="https://www.facebook.com/profile.php?id=61557197311912" target="_blank" class="inline-flex items-center gap-2 btn-primary px-6 py-3 rounded-full text-white font-bold">
                         Más información
                     </a>
