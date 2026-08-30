@@ -37,9 +37,10 @@ const contactForm = document.getElementById('contact-form');
 
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+        // Formspree handles the submission, so we don't prevent default
+        // The form will submit to Formspree and send email to anticoi@gmail.com
         
-        // Get form data
+        // Get form data for WhatsApp option
         const formData = new FormData(this);
         const data = {
             nombre: formData.get('nombre'),
@@ -51,29 +52,13 @@ if (contactForm) {
         
         // Validate form
         if (!data.nombre || !data.email || !data.mensaje) {
+            e.preventDefault();
             alert('Por favor, completa todos los campos obligatorios.');
             return;
         }
         
-        // Create WhatsApp message
-        const whatsappMessage = encodeURIComponent(
-            `Hola La Skina! 🎵\n\n` +
-            `Nombre: ${data.nombre}\n` +
-            `Email: ${data.email}\n` +
-            `Teléfono: ${data.telefono}\n` +
-            `Fecha del evento: ${data.fecha || 'No especificada'}\n\n` +
-            `Mensaje:\n${data.mensaje}`
-        );
-        
-        // Open WhatsApp with the message
-        const whatsappUrl = `https://wa.me/56912345678?text=${whatsappMessage}`;
-        window.open(whatsappUrl, '_blank');
-        
-        // Reset form
-        this.reset();
-        
         // Show success message
-        alert('¡Gracias por tu mensaje! Te redirigiremos a WhatsApp para completar tu consulta.');
+        alert('¡Gracias por tu mensaje! Hemos enviado tu consulta por correo electrónico. También puedes contactarnos por WhatsApp para una respuesta más rápida.');
     });
 }
 
