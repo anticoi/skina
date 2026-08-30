@@ -148,7 +148,13 @@
       "id": 25,
       "title": "Skina En vivo",
       "description": "La Skina En vivo musica para bailar",
-      "filename": "logo_skina.jpeg"
+      "filename": "images/logo_skina.jpeg"
+    },
+    {
+      "id": 26,
+      "title": "Skina Cartoon",
+      "description": "Cartoon Skina",
+      "filename": "images/gemini_generated_image_8sun7k8sun7k8sun.jpeg"
     }
   ]
 }
