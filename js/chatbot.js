@@ -135,7 +135,7 @@ function createChatbot() {
     chatButton.style.cssText = `
         position: fixed;
         bottom: 24px;
-        right: 24px;
+        left: 24px;
         width: 60px;
         height: 60px;
         background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%);
@@ -164,7 +164,7 @@ function createChatbot() {
     chatWindow.style.cssText = `
         position: fixed;
         bottom: 100px;
-        right: 24px;
+        left: 24px;
         width: 360px;
         max-width: calc(100vw - 48px);
         height: 500px;
