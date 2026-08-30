@@ -4,6 +4,15 @@
 
 let galleryData = [];
 
+// Helper: normalize image filename to avoid duplicated "images/" prefix
+function getImagePath(filename) {
+    if (!filename) return '';
+    // If filename already starts with "images/", return as-is
+    if (filename.startsWith('images/')) return filename;
+    // Otherwise, prepend "images/"
+    return `images/${filename}`;
+}
+
 // Load gallery data from JSON file
 async function loadGalleryData() {
     try {
@@ -33,7 +42,7 @@ function renderGallery() {
         photoCard.innerHTML = `
             <div class="aspect-square overflow-hidden">
                 <img 
-                    src="images/${photo.filename}" 
+                    src="${getImagePath(photo.filename)}" 
                     alt="${photo.title}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
@@ -77,7 +86,7 @@ function openLightbox(photo) {
         </button>
         <div class="max-w-5xl max-h-[90vh] relative">
             <img 
-                src="images/${photo.filename}" 
+                src="${getImagePath(photo.filename)}" 
                 alt="${photo.title}"
                 class="max-w-full max-h-[80vh] object-contain rounded-lg"
             >
@@ -126,7 +135,7 @@ function navigatePhoto(direction) {
     const title = lightbox.querySelector('h3');
     const description = lightbox.querySelector('p');
     
-    img.src = `images/${newPhoto.filename}`;
+    img.src = getImagePath(newPhoto.filename);
     img.alt = newPhoto.title;
     title.textContent = newPhoto.title;
     description.textContent = newPhoto.description;
