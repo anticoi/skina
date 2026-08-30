@@ -1,0 +1,328 @@
+// Chatbot para La Skina - Respuestas predefinidas + WhatsApp
+// Configuración del número de WhatsApp
+const WHATSAPP_NUMBER = '56990165899';
+
+// Base de conocimiento del chatbot
+const chatbotKnowledge = [
+    {
+        keywords: ['precio', 'costo', 'cuanto', 'valor', 'cobran', 'tarifa', 'presupuesto'],
+        response: 'Nuestros precios varían según el tipo de evento, duración y ubicación. Te recomendamos contactarnos directamente por WhatsApp para darte una cotización personalizada. ¿Quieres que te conecte con nuestro equipo?',
+        action: 'whatsapp'
+    },
+    {
+        keywords: ['reserva', 'reservar', 'contratar', 'contratacion', 'agendar', 'booking', 'disponibilidad'],
+        response: '¡Genial! Para reservas puedes contactarnos directamente por WhatsApp o usar el formulario de contacto en la sección "Contacto". Te respondemos lo antes posible. ¿Quieres abrir WhatsApp ahora?',
+        action: 'whatsapp'
+    },
+    {
+        keywords: ['repertorio', 'canciones', 'musica', 'temas', 'playlist', 'que tocan', 'que tocan'],
+        response: 'Nuestro repertorio incluye: Clásicos de los 80, Pop/Rock Retro, Baladas del Recuerdo, Ritmos de Época, Disco, New Wave, Rock en Español y Pop Latino. ¡Tenemos más de 100 clásicos en nuestro repertorio! ¿Quieres saber si tocamos alguna canción en particular?',
+        action: 'none'
+    },
+    {
+        keywords: ['evento', 'cumpleaños', 'boda', 'matrimonio', 'aniversario', 'empresa', 'corporativo', 'pub', 'bar', 'fiesta'],
+        response: 'Tocamos en todo tipo de eventos: cumpleaños, bodas, aniversarios, eventos corporativos, pubs y bares. Adaptamos la música según la ocasión. ¿Quieres consultarnos sobre tu evento por WhatsApp?',
+        action: 'whatsapp'
+    },
+    {
+        keywords: ['donde', 'ubicacion', 'direccion', 'lugar', 'santiago', 'region', 'ciudad'],
+        response: 'Estamos basados en Santiago, Chile. Tocamos en diferentes locaciones según el evento. ¿Quieres consultarnos sobre tu zona por WhatsApp?',
+        action: 'whatsapp'
+    },
+    {
+        keywords: ['contacto', 'telefono', 'celular', 'numero', 'email', 'correo', 'whatsapp'],
+        response: 'Puedes contactarnos por WhatsApp al +56 9 9016 5899 o usar el formulario de contacto en la sección "Contacto". ¿Quieres abrir WhatsApp ahora?',
+        action: 'whatsapp'
+    },
+    {
+        keywords: ['integrantes', 'miembros', 'quienes', 'banda', 'grupo', 'musicos'],
+        response: 'La Skina está conformada por músicos con más de 20 años de trayectoria. Cada integrante domina su instrumento y el arte de conectar con el público. ¡Conócenos en la sección "Nosotros"!',
+        action: 'none'
+    },
+    {
+        keywords: ['video', 'videos', 'youtube', 'ver', 'multimedia'],
+        response: 'Puedes ver nuestros videos en la sección "Videos" del sitio. También puedes seguirnos en Facebook para más contenido. ¿Quieres ir a la sección de videos?',
+        action: 'scroll-videos'
+    },
+    {
+        keywords: ['galeria', 'fotos', 'imagenes', 'fotografias'],
+        response: 'Mira nuestros momentos especiales en la sección "Galería". ¿Quieres ir a ver las fotos?',
+        action: 'scroll-galeria'
+    },
+    {
+        keywords: ['facebook', 'redes', 'redes sociales', 'instagram', 'seguir'],
+        response: 'Síguenos en Facebook: https://www.facebook.com/profile.php?id=61557197311912 ¿Quieres abrir nuestro Facebook?',
+        action: 'facebook'
+    },
+    {
+        keywords: ['hola', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos', 'hey', 'que tal'],
+        response: '¡Hola! Soy el asistente virtual de La Skina. Puedo ayudarte con información sobre reservas, repertorio, eventos y más. ¿En qué te puedo ayudar?',
+        action: 'none'
+    },
+    {
+        keywords: ['gracias', 'muchas gracias', 'perfecto', 'genial', 'excelente', 'ok', 'gracias por'],
+        response: '¡De nada! Si necesitas algo más, no dudes en preguntar. También puedes contactarnos directamente por WhatsApp. ¿Hay algo más en lo que te pueda ayudar?',
+        action: 'none'
+    },
+    {
+        keywords: ['adios', 'chao', 'hasta luego', 'nos vemos', 'bye', 'hasta pronto'],
+        response: '¡Hasta pronto! Gracias por tu interés en La Skina. ¡Esperamos verte en nuestro próximo evento! 🎵',
+        action: 'none'
+    }
+];
+
+// Respuesta por defecto
+const defaultResponse = 'No estoy seguro de entender tu pregunta. Puedo ayudarte con: reservas, precios, repertorio, eventos, contacto, videos y galería. También puedes contactarnos directamente por WhatsApp. ¿Quieres abrir WhatsApp?',
+    defaultAction = 'whatsapp';
+
+// Buscar la mejor respuesta
+function findResponse(message) {
+    const lowerMessage = message.toLowerCase();
+    let bestMatch = null;
+    let maxMatches = 0;
+
+    for (const item of chatbotKnowledge) {
+        let matches = 0;
+        for (const keyword of item.keywords) {
+            if (lowerMessage.includes(keyword)) {
+                matches++;
+            }
+        }
+        if (matches > maxMatches) {
+            maxMatches = matches;
+            bestMatch = item;
+        }
+    }
+
+    if (bestMatch) {
+        return { response: bestMatch.response, action: bestMatch.action };
+    }
+    return { response: defaultResponse, action: defaultAction };
+}
+
+// Ejecutar acción (abrir WhatsApp, scroll, etc.)
+function executeAction(action) {
+    switch (action) {
+        case 'whatsapp':
+            const whatsappMsg = encodeURIComponent('Hola, vengo del sitio web de La Skina y me gustaría más información');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMsg}`, '_blank');
+            break;
+        case 'facebook':
+            window.open('https://www.facebook.com/profile.php?id=61557197311912', '_blank');
+            break;
+        case 'scroll-videos':
+            document.getElementById('multimedia').scrollIntoView({ behavior: 'smooth' });
+            break;
+        case 'scroll-galeria':
+            document.getElementById('galeria').scrollIntoView({ behavior: 'smooth' });
+            break;
+        case 'scroll-contacto':
+            document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+            break;
+    }
+}
+
+// Crear el chatbot UI
+function createChatbot() {
+    // Botón flotante
+    const chatButton = document.createElement('div');
+    chatButton.id = 'chatbot-button';
+    chatButton.innerHTML = `
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    `;
+    chatButton.style.cssText = `
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 4px 20px rgba(255, 0, 127, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        color: white;
+    `;
+    chatButton.onmouseover = () => {
+        chatButton.style.transform = 'scale(1.1)';
+        chatButton.style.boxShadow = '0 6px 30px rgba(255, 0, 127, 0.7)';
+    };
+    chatButton.onmouseout = () => {
+        chatButton.style.transform = 'scale(1)';
+        chatButton.style.boxShadow = '0 4px 20px rgba(255, 0, 127, 0.5)';
+    };
+
+    // Ventana del chat
+    const chatWindow = document.createElement('div');
+    chatWindow.id = 'chatbot-window';
+    chatWindow.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        right: 24px;
+        width: 360px;
+        max-width: calc(100vw - 48px);
+        height: 500px;
+        max-height: calc(100vh - 140px);
+        background: #160f2e;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(0, 243, 255, 0.2);
+    `;
+
+    chatWindow.innerHTML = `
+        <div style="background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); padding: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg class="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div style="color: white; font-weight: bold; font-size: 16px;">La Skina</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 12px;">Asistente Virtual</div>
+                </div>
+            </div>
+            <button id="chatbot-close" style="background: none; border: none; color: white; cursor: pointer; padding: 4px;">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="chatbot-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); padding: 12px 16px; border-radius: 12px 12px 12px 4px; color: #e0e0e0; font-size: 14px; line-height: 1.5;">
+                ¡Hola! Soy el asistente virtual de La Skina 🎵. Puedo ayudarte con:
+                <ul style="margin-top: 8px; padding-left: 20px; color: #00f3ff;">
+                    <li>Reservas y cotizaciones</li>
+                    <li>Repertorio musical</li>
+                    <li>Tipos de eventos</li>
+                    <li>Contacto y redes sociales</li>
+                </ul>
+                ¿En qué te puedo ayudar?
+            </div>
+        </div>
+        <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px;">
+            <input id="chatbot-input" type="text" placeholder="Escribe tu mensaje..." style="flex: 1; background: #0d081d; border: 1px solid rgba(255,0,127,0.3); border-radius: 8px; padding: 10px 14px; color: white; font-size: 14px; outline: none;">
+            <button id="chatbot-send" style="background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); border: none; border-radius: 8px; padding: 10px 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </button>
+        </div>
+        <div style="padding: 8px 12px; background: rgba(13, 8, 29, 0.8); border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <button id="chatbot-whatsapp" style="background: #25D366; border: none; border-radius: 8px; padding: 8px 16px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Hablar por WhatsApp
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(chatButton);
+    document.body.appendChild(chatWindow);
+
+    // Toggle chat window
+    chatButton.addEventListener('click', () => {
+        const window = document.getElementById('chatbot-window');
+        if (window.style.display === 'flex') {
+            window.style.display = 'none';
+        } else {
+            window.style.display = 'flex';
+        }
+    });
+
+    // Close button
+    document.getElementById('chatbot-close').addEventListener('click', () => {
+        chatWindow.style.display = 'none';
+    });
+
+    // WhatsApp button
+    document.getElementById('chatbot-whatsapp').addEventListener('click', () => {
+        executeAction('whatsapp');
+    });
+
+    // Send message
+    const input = document.getElementById('chatbot-input');
+    const sendBtn = document.getElementById('chatbot-send');
+
+    function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Add user message
+        addMessage(text, 'user');
+        input.value = '';
+
+        // Bot response after short delay
+        setTimeout(() => {
+            const { response, action } = findResponse(text);
+            addMessage(response, 'bot', action);
+        }, 500);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
+
+// Add message to chat
+function addMessage(text, sender, action) {
+    const messages = document.getElementById('chatbot-messages');
+    const msgDiv = document.createElement('div');
+
+    if (sender === 'user') {
+        msgDiv.style.cssText = 'align-self: flex-end; background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); padding: 10px 16px; border-radius: 12px 12px 4px 12px; color: white; font-size: 14px; line-height: 1.5; max-width: 80%;';
+    } else {
+        msgDiv.style.cssText = 'align-self: flex-start; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); padding: 10px 16px; border-radius: 12px 12px 12px 4px; color: #e0e0e0; font-size: 14px; line-height: 1.5; max-width: 85%;';
+    }
+
+    msgDiv.textContent = text;
+    messages.appendChild(msgDiv);
+
+    // Add action button if needed
+    if (action && action !== 'none') {
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = 'align-self: flex-start; margin-top: 4px;';
+
+        let btnText = '';
+        let btnIcon = '';
+        if (action === 'whatsapp') {
+            btnText = 'Abrir WhatsApp';
+            btnIcon = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+        } else if (action === 'facebook') {
+            btnText = 'Abrir Facebook';
+            btnIcon = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>';
+        } else if (action === 'scroll-videos') {
+            btnText = 'Ver Videos';
+            btnIcon = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 13.19l6.063 3.565a1 1 0 001.495-.869V8.114a1 1 0 00-1.495-.869l-6.063 3.565a1 1 0 000 1.738z"></path></svg>';
+        } else if (action === 'scroll-galeria') {
+            btnText = 'Ver Galería';
+            btnIcon = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+        }
+
+        btnContainer.innerHTML = `<button class="chatbot-action-btn" data-action="${action}" style="background: ${action === 'whatsapp' ? '#25D366' : action === 'facebook' ? '#1877F2' : 'linear-gradient(135deg, #ff007f 0%, #9d00ff 100%)'}; border: none; border-radius: 8px; padding: 8px 14px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">${btnIcon} ${btnText}</button>`;
+
+        btnContainer.querySelector('.chatbot-action-btn').addEventListener('click', function() {
+            executeAction(this.dataset.action);
+        });
+
+        messages.appendChild(btnContainer);
+    }
+
+    // Auto scroll
+    messages.scrollTop = messages.scrollHeight;
+}
+
+// Initialize chatbot when DOM is ready
+document.addEventListener('DOMContentLoaded', createChatbot);
