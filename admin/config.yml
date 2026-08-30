@@ -1,0 +1,50 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Media: las imágenes se guardan en /images
+media_folder: "images"
+public_folder: "images"
+
+# Habilitar Netlify Identity
+local_backend: false
+
+# Colecciones
+collections:
+  # Galería de fotos: edita un único archivo JSON
+  - name: "galeria"
+    label: "Galería de Fotos"
+    description: "Administra las fotos de la galería del sitio"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - label: "Fotos de la Galería"
+        name: "gallery"
+        file: "gallery.json"
+        fields:
+          - label: "Fotos"
+            name: "photos"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "ID", name: "id", widget: "number", required: true }
+              - { label: "Título", name: "title", widget: "string", required: true }
+              - { label: "Descripción", name: "description", widget: "string", required: true }
+              - { label: "Imagen", name: "filename", widget: "image", required: true }
+
+  # Configuración del Hero (sección principal)
+  - name: "hero"
+    label: "Sección Principal (Hero)"
+    description: "Configura la imagen de fondo y el logo de la sección principal"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - label: "Configuración Hero"
+        name: "hero_config"
+        file: "hero_config.json"
+        fields:
+          - { label: "Imagen de fondo (semitransparente)", name: "background_image", widget: "image", required: true }
+          - { label: "Logo principal", name: "logo", widget: "image", required: true }
+          - { label: "Opacidad del fondo (0-100)", name: "background_opacity", widget: "number", default: 20, min: 0, max: 100 }

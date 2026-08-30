@@ -16,9 +16,16 @@ Sitio web estático moderno, rápido y responsivo para la banda "La Skina", espe
 ```
 skina web/
 ├── index.html          # Página principal
+├── gallery.json        # Datos de la galería (editables desde el admin)
+├── hero_config.json    # Configuración de la sección principal (editable desde el admin)
+├── admin/              # Panel de administración (Decap CMS)
+│   ├── index.html      # Interfaz del admin
+│   └── config.yml      # Configuración del CMS
 ├── js/
 │   ├── videos.js       # Configuración modular de videos
+│   ├── gallery.js      # Galería de fotos (carga desde gallery.json)
 │   └── main.js         # Funcionalidad principal
+├── images/             # Imágenes del sitio
 ├── README.md           # Este archivo
 └── .gitignore          # Archivos ignorados por Git
 ```
@@ -219,7 +226,61 @@ El sitio está optimizado para:
 
 Para preguntas o personalización adicional, contacta al desarrollador.
 
-## 📄 Licencia
+## �️ Panel de Administración (Mantenedor de Fotos)
+
+El sitio incluye un panel de administración construido con **Decap CMS** (antes Netlify CMS) que permite gestionar las fotos de la galería y la sección principal sin tocar código.
+
+### Acceso al panel
+
+Una vez desplegado en Netlify, accede al panel en:
+
+```
+https://TU-SITIO.netlify.app/admin/
+```
+
+### Configuración inicial en Netlify (solo una vez)
+
+Para que el panel funcione, necesitas habilitar **Netlify Identity** y **Git Gateway**:
+
+1. Ve a tu sitio en [app.netlify.com](https://app.netlify.com/)
+2. Ve a **Site settings > Identity > Enable Identity**
+3. En **Identity > Registration**, selecciona **Invite only** (o Open si prefieres)
+4. En **Identity > Services > Git Gateway**, haz clic en **Enable Git Gateway**
+5. En **Identity**, haz clic en **Invite users** e invita a tu correo
+6. Recibirás un email para registrarte y crear tu contraseña
+
+### Cómo usar el panel
+
+1. Entra a `https://TU-SITIO.netlify.app/admin/`
+2. Inicia sesión con tu cuenta de Netlify Identity
+3. Verás dos secciones:
+   - **Galería de Fotos**: Agrega, edita o elimina fotos de la galería
+   - **Sección Principal (Hero)**: Cambia la imagen de fondo, el logo y la opacidad
+
+### Agregar una foto nueva
+
+1. En el panel, ve a **Galería de Fotos**
+2. Haz clic en el registro existente para editarlo
+3. En la lista de fotos, haz clic en **Add** para agregar una nueva
+4. Completa: ID, Título, Descripción y selecciona la imagen (o súbela)
+5. Haz clic en **Save**
+6. El cambio se guarda en GitHub y Netlify despliega automáticamente
+
+### Cambiar imagen de fondo del hero
+
+1. En el panel, ve a **Sección Principal (Hero)**
+2. Cambia la imagen de fondo, el logo o la opacidad (0-100)
+3. Haz clic en **Save**
+4. Netlify desplegará automáticamente los cambios
+
+### Edición manual (alternativa)
+
+Si prefieres no usar el panel, puedes editar directamente:
+- `gallery.json` - datos de las fotos de la galería
+- `hero_config.json` - configuración de la sección principal
+- `js/videos.js` - configuración de videos
+
+## �📄 Licencia
 
 Este proyecto fue creado para La Skina. Todos los derechos reservados.
 

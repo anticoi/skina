@@ -168,8 +168,8 @@
 
     <!-- Hero Section -->
     <section id="inicio" class="gradient-hero min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
-        <div class="absolute inset-0 opacity-20">
-            <img src="images/WhatsApp Image 2026-08-29 at 18.40.26.jpeg" alt="Background" class="w-full h-full object-cover">
+        <div id="hero-background" class="absolute inset-0 opacity-20">
+            <img id="hero-bg-img" src="images/WhatsApp Image 2026-08-29 at 18.40.26.jpeg" alt="Background" class="w-full h-full object-cover">
         </div>
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-20 left-10 w-72 h-72 bg-[#ff007f] rounded-full filter blur-3xl animate-pulse-slow"></div>
@@ -179,7 +179,7 @@
         <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
             <div class="animate-float mb-8">
                 <div class="w-[40rem] h-auto mx-auto mb-6 rounded-2xl overflow-hidden shadow-2xl border-4 border-gold">
-                    <img src="images/logo_skina.jpeg" alt="La Skina Logo" class="w-full h-auto object-cover">
+                    <img id="hero-logo-img" src="images/logo_skina.jpeg" alt="La Skina Logo" class="w-full h-auto object-cover">
                 </div>
             </div>
             
@@ -440,5 +440,31 @@
     <script src="js/videos.js"></script>
     <script src="js/gallery.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Load hero configuration from hero_config.json
+        (async function loadHeroConfig() {
+            try {
+                const response = await fetch('hero_config.json');
+                if (!response.ok) return;
+                const config = await response.json();
+                
+                const bgImg = document.getElementById('hero-bg-img');
+                const logoImg = document.getElementById('hero-logo-img');
+                const bgContainer = document.getElementById('hero-background');
+                
+                if (bgImg && config.background_image) {
+                    bgImg.src = `images/${config.background_image}`;
+                }
+                if (logoImg && config.logo) {
+                    logoImg.src = `images/${config.logo}`;
+                }
+                if (bgContainer && typeof config.background_opacity === 'number') {
+                    bgContainer.style.opacity = config.background_opacity / 100;
+                }
+            } catch (e) {
+                console.error('Error cargando hero_config.json:', e);
+            }
+        })();
+    </script>
 </body>
 </html>
