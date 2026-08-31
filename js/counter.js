@@ -1,19 +1,41 @@
 // Contador de Visitas - La Skina
-// Simula visitantes en tiempo real con base realista
+// Simula visitantes en tiempo real con base realista e historico persistente
 
 function initVisitorCounter() {
     const VISIT_KEY = 'skina_visits';
     const LAST_VISIT_KEY = 'skina_last_visit';
     const SESSION_KEY = 'skina_session_counted';
-    const BASE_VISITS = 3847; // Base realista de visitas
+    const FIRST_VISIT_KEY = 'skina_first_visit';
 
-    // Obtener contador guardado o usar base
-    let visits = parseInt(localStorage.getItem(VISIT_KEY) || BASE_VISITS.toString());
-    const lastVisit = localStorage.getItem(LAST_VISIT_KEY);
+    // Fecha de "inicio" del sitio: 1 de enero de 2026
+    const SITE_START_DATE = new Date('2026-01-01').getTime();
     const now = Date.now();
+
+    // Calcular base histórica: visitas acumuladas desde el inicio del sitio
+    // Promedio de ~15 visitas por día desde el 1 de enero de 2026
+    const daysSinceStart = Math.floor((now - SITE_START_DATE) / (1000 * 60 * 60 * 24));
+    const DAILY_AVERAGE = 15;
+    const baseVisits = daysSinceStart * DAILY_AVERAGE + 1200; // 1200 base inicial
+
+    // Obtener contador guardado
+    let storedVisits = parseInt(localStorage.getItem(VISIT_KEY) || '0');
+    const firstVisit = localStorage.getItem(FIRST_VISIT_KEY);
+
+    // Si es primera vez que entra (no hay contador guardado), usar la base histórica
+    if (!firstVisit) {
+        localStorage.setItem(FIRST_VISIT_KEY, now.toString());
+        storedVisits = baseVisits;
+        localStorage.setItem(VISIT_KEY, storedVisits.toString());
+    }
+
+    // El contador mostrado es el máximo entre el guardado y la base histórica actual
+    // Esto asegura que el contador siempre crezca con el tiempo, incluso si se borra el localStorage
+    let visits = Math.max(storedVisits, baseVisits);
+
+    const lastVisit = localStorage.getItem(LAST_VISIT_KEY);
     const sessionCounted = sessionStorage.getItem(SESSION_KEY);
 
-    // Contar visita nueva
+    // Contar visita nueva si no se ha contado en esta sesión
     if (!sessionCounted || (lastVisit && (now - parseInt(lastVisit)) > 1800000)) {
         visits++;
         localStorage.setItem(VISIT_KEY, visits.toString());
