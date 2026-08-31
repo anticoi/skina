@@ -35,7 +35,6 @@ const artistasSkina = [
     'billy ocean',
     'rick astley',
     'whitney houston',
-    'lionel richie',
     'barry manilow',
     'elton john',
     'billy joel',
@@ -87,7 +86,15 @@ const artistasSkina = [
     'gloria estefan', 'miami sound machine',
     'celia cruz',
     'selenas',
-    'thalia', 'thalía'
+    'thalia', 'thalía',
+    'bill haley',
+    'elvis presley', 'elvis',
+    'creedence clearwater revival', 'creedence', 'ccr',
+    'kc and the sunshine band', 'kc',
+    'hall and oates', 'hall & oates',
+    'katrina and the waves',
+    'glenn frey',
+    'inx'
 ];
 
 // Lista de canciones populares que tocan
@@ -144,7 +151,38 @@ const cancionesSkina = [
     'bailando',
     'vivir mi vida',
     'la bilirrubina',
-    'el precio de mi cabeza'
+    'el precio de mi cabeza',
+    'funky music', 'funky',
+    'brick house',
+    'that\'s the way', 'thats the way',
+    'shake shake',
+    'boogie man',
+    'keep it comin', 'keep it coming',
+    'new sensation',
+    'last train to london',
+    'maniac',
+    'heat is on',
+    'walking on sunshine',
+    'maneater',
+    'i can go for that',
+    'kiss on my list',
+    'get ready',
+    'rock around the clock',
+    'hound dog',
+    'jailhouse rock',
+    'suspicious minds',
+    'proud mary',
+    'bad moon rising',
+    'have you ever seen the rain',
+    'oye como va',
+    'black magic woman',
+    'smooth',
+    'simbolo de paz', 'símbolo de paz',
+    'no voy en tren',
+    'estoy verde',
+    'influenza',
+    'vitaminas',
+    'jet set'
 ];
 
 // Base de conocimiento del chatbot
