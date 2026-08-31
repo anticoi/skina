@@ -39,6 +39,51 @@ const videoData = [
         description: 'Un vistazo rápido a nuestra música'
     },
     {
+        id: 8,
+        type: 'local',
+        title: 'La Skina - Show Completo',
+        url: 'videos/WhatsApp Video 2026-06-07 at 07.53.27.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'Presentacion completa de La Skina en vivo'
+    },
+    {
+        id: 9,
+        type: 'local',
+        title: 'La Skina - Golden Music',
+        url: 'videos/WhatsApp Video 2026-06-07 at 07.54.13.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'La Skina tocando en Golden Music'
+    },
+    {
+        id: 10,
+        type: 'local',
+        title: 'La Skina - En Escenario',
+        url: 'videos/WhatsApp Video 2026-06-07 at 07.54.23.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'La banda en pleno escenario'
+    },
+    {
+        id: 11,
+        type: 'local',
+        title: 'La Skina - Noche Ochentera',
+        url: 'videos/WhatsApp Video 2026-06-07 at 07.54.24.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'Una noche llena de clasicos de los 80'
+    },
+    {
+        id: 12,
+        type: 'local',
+        title: 'La Skina - Cierre del Show',
+        url: 'videos/WhatsApp Video 2026-06-07 at 07.54.25.mp4',
+        embedUrl: null,
+        thumbnail: null,
+        description: 'El cierre inolvidable de La Skina'
+    },
+    {
         id: 5,
         type: 'facebook',
         title: 'Facebook Reel',
