@@ -324,7 +324,72 @@ function findResponse(message) {
         }
     }
 
-    // 4. Búsqueda normal en la base de conocimiento
+    // 4. Detectar preguntas sobre disponibilidad de fechas
+    // Patrones: "el 12 esta disponible", "12 septiembre", "disponible el X", "tienen fecha X"
+    const mesesRegex = /(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre|ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic)/i;
+    const fechaPattern = /(\d{1,2})\s*(de\s*)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre|ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic)?/i;
+    const palabrasDisponibilidad = ['disponible', 'disponibilidad', 'libre', 'ocupado', 'reservar', 'reserva', 'agendar', 'fecha', 'contratar', 'separar', 'tienen fecha', 'tienen el'];
+
+    const tienePalabraDisponibilidad = palabrasDisponibilidad.some(p => lowerMessage.includes(p));
+    const tieneFecha = fechaPattern.test(lowerMessage) && /\d{1,2}/.test(lowerMessage);
+
+    if (tienePalabraDisponibilidad || (tieneFecha && (lowerMessage.includes('dispon') || lowerMessage.includes('libre') || lowerMessage.includes('reserv') || lowerMessage.includes('separar') || lowerMessage.includes('agendar') || lowerMessage.includes('contratar')))) {
+        // Extraer el día y mes si están presentes
+        const match = lowerMessage.match(/(\d{1,2})\s*(?:de\s*)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre|ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic)?/i);
+        let fechaTexto = '';
+        if (match) {
+            const dia = match[1];
+            const mes = match[2] || '';
+            const mesesCompletos = {
+                'ene': 'enero', 'feb': 'febrero', 'mar': 'marzo', 'abr': 'abril',
+                'may': 'mayo', 'jun': 'junio', 'jul': 'julio', 'ago': 'agosto',
+                'sep': 'septiembre', 'set': 'septiembre', 'oct': 'octubre',
+                'nov': 'noviembre', 'dic': 'diciembre'
+            };
+            const mesCompleto = mesesCompletos[mes.toLowerCase()] || mes;
+            fechaTexto = mesCompleto ? `el ${dia} de ${mesCompleto}` : `el día ${dia}`;
+        }
+
+        // Verificar si hay eventos en el calendario para esa fecha
+        let tieneEvento = false;
+        if (typeof eventosCalendario !== 'undefined' && match) {
+            const diaNum = parseInt(match[1]);
+            const mesesNum = {
+                'enero': 0, 'febrero': 1, 'marzo': 2, 'abril': 3, 'mayo': 4,
+                'junio': 5, 'julio': 6, 'agosto': 7, 'septiembre': 8, 'setiembre': 8,
+                'octubre': 9, 'noviembre': 10, 'diciembre': 11,
+                'ene': 0, 'feb': 1, 'mar': 2, 'abr': 3, 'may': 4,
+                'jun': 5, 'jul': 6, 'ago': 7, 'sep': 8, 'set': 8,
+                'oct': 9, 'nov': 10, 'dic': 11
+            };
+            const mesNum = mesesNum[match[2]?.toLowerCase()] || new Date().getMonth();
+            for (const evento of eventosCalendario) {
+                if (evento.fecha && evento.fecha.getDate() === diaNum && evento.fecha.getMonth() === mesNum) {
+                    tieneEvento = true;
+                    break;
+                }
+            }
+        }
+
+        if (tieneEvento) {
+            return {
+                response: `Lo siento, ${fechaTexto} ya tenemos una presentación agendada 😔. Pero podemos revisar otras fechas cercanas. ¿Quieres consultarnos por WhatsApp qué fechas tenemos disponibles?`,
+                action: 'whatsapp'
+            };
+        } else if (fechaTexto) {
+            return {
+                response: `¡Sí! ${fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1)} tenemos disponibilidad ✅. Para confirmar la reserva y darte todos los detalles, te recomiendo contactarnos por WhatsApp. ¿Quieres abrir WhatsApp ahora?`,
+                action: 'whatsapp'
+            };
+        } else {
+            return {
+                response: 'Para consultarnos por disponibilidad de fechas, lo mejor es contactarnos directamente por WhatsApp. Así te confirmamos al instante qué días tenemos libres. ¿Quieres abrir WhatsApp?',
+                action: 'whatsapp'
+            };
+        }
+    }
+
+    // 5. Búsqueda normal en la base de conocimiento
     let bestMatch = null;
     let maxMatches = 0;
 
