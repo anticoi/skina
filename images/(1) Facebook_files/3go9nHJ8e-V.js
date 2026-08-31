@@ -1,0 +1,5 @@
+;/*FB_PKG_DELIM*/
+
+__d("meta-brand-instagram-filled-16",["ix","cr:25887","cr:29405","fbicon"],(function(t,n,r,o,a,i,l,s){"use strict";var e=n("cr:25887")!=null?n("cr:25887"):n("cr:29405"),u=e!=null?[e,16]:null,c=u!=null?u:o("fbicon")._(s("680443"),16),d=u!=null?u:o("fbicon")._(s("680443"),16);l.metaBrandInstagramFilled16=c,l.metaBrandInstagramAppInstagramFilled16=d}),98);
+__d("meta-brand-messenger-filled-16",["ix","cr:26132","cr:29840","fbicon"],(function(t,n,r,o,a,i,l,s){"use strict";var e=n("cr:26132")!=null?n("cr:26132"):n("cr:29840"),u=e!=null?[e,16]:null,c=u!=null?u:o("fbicon")._(s("505616"),16),d=u!=null?u:o("fbicon")._(s("973332"),16),m=u!=null?u:o("fbicon")._(s("505616"),16);l.metaBrandMessengerFilled16=c,l.metaBrandMessengerAppMessengerAltFilled16=d,l.metaBrandMessengerAppMessengerFilled16=m}),98);
+__d("meta-brand-whatsapp-filled-16",["ix","cr:27318","cr:32263","fbicon"],(function(t,n,r,o,a,i,l,s){"use strict";var e=n("cr:27318")!=null?n("cr:27318"):n("cr:32263"),u=e!=null?[e,16]:null,c=u!=null?u:o("fbicon")._(s("686157"),16),d=u!=null?u:o("fbicon")._(s("686157"),16);l.metaBrandWhatsappFilled16=c,l.metaBrandWhatsappAppWhatsappFilled16=d}),98);

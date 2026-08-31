@@ -3,8 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Skina - Música Ochentera y del Recuerdo</title>
-    <meta name="description" content="La mejor música ochentera y del recuerdo con músicos de gran trayectoria. Rock, Pop, Baladas y Ritmos de época.">
+    <title>La Skina - Banda de Música Ochentera y del Recuerdo | Santiago, Chile</title>
+    <meta name="description" content="La Skina - La mejor banda de música ochentera y del recuerdo en Santiago, Chile. Rock, Pop, Baladas, Disco, Funk y Ritmos de época. Músicos con más de 20 años de trayectoria. Reserva tu evento.">
+    <meta name="keywords" content="La Skina, banda musical, música ochentera, música del recuerdo, rock de los 80, baladas, disco, funk, eventos Santiago, banda para eventos, música en vivo Chile, reservas">
+    <meta name="author" content="La Skina">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Spanish">
+    <meta name="geo.region" content="CL-RM">
+    <meta name="geo.placename" content="Santiago, Chile">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skina-web.vercel.app/">
+    <meta property="og:title" content="La Skina - Banda de Música Ochentera y del Recuerdo">
+    <meta property="og:description" content="La mejor música ochentera y del recuerdo con músicos de gran trayectoria. Rock, Pop, Baladas, Disco, Funk y Ritmos de época. ¡Reserva tu evento!">
+    <meta property="og:image" content="https://skina-web.vercel.app/images/logo_skina.jpeg">
+    <meta property="og:locale" content="es_CL">
+    <meta property="og:site_name" content="La Skina">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="La Skina - Banda de Música Ochentera y del Recuerdo">
+    <meta name="twitter:description" content="La mejor música ochentera y del recuerdo en Santiago, Chile. ¡Reserva tu evento!">
+    <meta name="twitter:image" content="https://skina-web.vercel.app/images/logo_skina.jpeg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="images/logo_skina.jpeg">
+    <link rel="apple-touch-icon" href="images/logo_skina.jpeg">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://skina-web.vercel.app/">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MusicGroup",
+        "name": "La Skina",
+        "description": "Banda de música ochentera y del recuerdo con músicos de gran trayectoria",
+        "genre": ["Rock", "Pop", "Baladas", "Disco", "Funk", "New Wave", "Rock en Español"],
+        "areaServed": "Santiago, Chile",
+        "sameAs": [
+            "https://www.facebook.com/profile.php?id=61557197311912",
+            "https://www.instagram.com/banda_la_skina/"
+        ],
+        "telephone": "+56990165899",
+        "member": {
+            "@type": "MusicGroup",
+            "name": "La Skina",
+            "description": "Músicos con más de 20 años de trayectoria"
+        }
+    }
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,9 +212,12 @@
                 <div class="hidden md:flex space-x-8">
                     <a href="#inicio" class="nav-link text-gray-300 hover:text-gold transition-colors">Inicio</a>
                     <a href="#nosotros" class="nav-link text-gray-300 hover:text-gold transition-colors">Nosotros</a>
+                    <a href="#musicos" class="nav-link text-gray-300 hover:text-gold transition-colors">Músicos</a>
                     <a href="#multimedia" class="nav-link text-gray-300 hover:text-gold transition-colors">Videos</a>
                     <a href="#galeria" class="nav-link text-gray-300 hover:text-gold transition-colors">Galería</a>
                     <a href="#servicios" class="nav-link text-gray-300 hover:text-gold transition-colors">Servicios</a>
+                    <a href="#testimonios" class="nav-link text-gray-300 hover:text-gold transition-colors">Testimonios</a>
+                    <a href="#faq" class="nav-link text-gray-300 hover:text-gold transition-colors">FAQ</a>
                     <a href="#calendario" class="nav-link text-gray-300 hover:text-gold transition-colors">Calendario</a>
                     <a href="#contacto" class="nav-link text-gray-300 hover:text-gold transition-colors">Contacto</a>
                 </div>
@@ -170,9 +233,12 @@
             <div class="px-4 py-2 space-y-2">
                 <a href="#inicio" class="block py-2 text-gray-300 hover:text-gold">Inicio</a>
                 <a href="#nosotros" class="block py-2 text-gray-300 hover:text-gold">Nosotros</a>
+                <a href="#musicos" class="block py-2 text-gray-300 hover:text-gold">Músicos</a>
                 <a href="#multimedia" class="block py-2 text-gray-300 hover:text-gold">Videos</a>
                 <a href="#galeria" class="block py-2 text-gray-300 hover:text-gold">Galería</a>
                 <a href="#servicios" class="block py-2 text-gray-300 hover:text-gold">Servicios</a>
+                <a href="#testimonios" class="block py-2 text-gray-300 hover:text-gold">Testimonios</a>
+                <a href="#faq" class="block py-2 text-gray-300 hover:text-gold">FAQ</a>
                 <a href="#calendario" class="block py-2 text-gray-300 hover:text-gold">Calendario</a>
                 <a href="#contacto" class="block py-2 text-gray-300 hover:text-gold">Contacto</a>
             </div>
@@ -339,6 +405,65 @@
                     <p class="text-gray-400 text-center">Presentaciones profesionales para empresas, conferencias y eventos corporativos.</p>
                 </div>
             </div>
+
+            <!-- Paquetes de Precios -->
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold text-gold mb-8 text-center">Nuestros Paquetes</h3>
+                <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <!-- Básico -->
+                    <div class="bg-[#160f2e] rounded-2xl p-8 border border-[#00f3ff]/20 card-hover text-center">
+                        <div class="w-14 h-14 bg-[#00f3ff]/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-7 h-7 text-[#00f3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#00f3ff] mb-2">Básico</h4>
+                        <p class="text-4xl font-bold text-gold mb-4">$<span class="text-3xl">350</span><span class="text-sm text-gray-400">.000</span></p>
+                        <ul class="text-gray-400 text-sm space-y-3 text-left mb-6">
+                            <li class="flex items-start gap-2"><span class="text-[#00f3ff]">✓</span> 2 horas de música en vivo</li>
+                            <li class="flex items-start gap-2"><span class="text-[#00f3ff]">✓</span> 4 músicos</li>
+                            <li class="flex items-start gap-2"><span class="text-[#00f3ff]">✓</span> Equipo de sonido básico</li>
+                            <li class="flex items-start gap-2"><span class="text-[#00f3ff]">✓</span> Repertorio estándar</li>
+                            <li class="flex items-start gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-600">Iluminación</span></li>
+                        </ul>
+                        <a href="https://wa.me/56990165899?text=Hola%2C%20me%20interesa%20el%20paquete%20B%C3%A1sico" target="_blank" class="block w-full py-3 bg-[#00f3ff]/20 border border-[#00f3ff]/40 rounded-full text-[#00f3ff] font-semibold hover:bg-[#00f3ff]/30 transition-all">Consultar</a>
+                    </div>
+
+                    <!-- Estándar (Destacado) -->
+                    <div class="bg-[#160f2e] rounded-2xl p-8 border-2 border-[#ff007f]/50 card-hover text-center relative transform md:scale-105">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#ff007f] text-white text-xs font-bold px-4 py-1 rounded-full">MÁS POPULAR</div>
+                        <div class="w-14 h-14 bg-[#ff007f]/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-7 h-7 text-[#ff007f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#ff007f] mb-2">Estándar</h4>
+                        <p class="text-4xl font-bold text-gold mb-4">$<span class="text-3xl">550</span><span class="text-sm text-gray-400">.000</span></p>
+                        <ul class="text-gray-400 text-sm space-y-3 text-left mb-6">
+                            <li class="flex items-start gap-2"><span class="text-[#ff007f]">✓</span> 3 horas de música en vivo</li>
+                            <li class="flex items-start gap-2"><span class="text-[#ff007f]">✓</span> 5 músicos</li>
+                            <li class="flex items-start gap-2"><span class="text-[#ff007f]">✓</span> Equipo de sonido profesional</li>
+                            <li class="flex items-start gap-2"><span class="text-[#ff007f]">✓</span> Repertorio amplio + peticiones</li>
+                            <li class="flex items-start gap-2"><span class="text-[#ff007f]">✓</span> Iluminación básica</li>
+                        </ul>
+                        <a href="https://wa.me/56990165899?text=Hola%2C%20me%20interesa%20el%20paquete%20Est%C3%A1ndar" target="_blank" class="block w-full py-3 bg-[#ff007f] rounded-full text-white font-bold hover:bg-[#e60072] transition-all">Consultar</a>
+                    </div>
+
+                    <!-- Premium -->
+                    <div class="bg-[#160f2e] rounded-2xl p-8 border border-[#9d00ff]/20 card-hover text-center">
+                        <div class="w-14 h-14 bg-[#9d00ff]/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-7 h-7 text-[#9d00ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#9d00ff] mb-2">Premium</h4>
+                        <p class="text-4xl font-bold text-gold mb-4">$<span class="text-3xl">850</span><span class="text-sm text-gray-400">.000</span></p>
+                        <ul class="text-gray-400 text-sm space-y-3 text-left mb-6">
+                            <li class="flex items-start gap-2"><span class="text-[#9d00ff]">✓</span> 4 horas de música en vivo</li>
+                            <li class="flex items-start gap-2"><span class="text-[#9d00ff]">✓</span> 6 músicos + coros</li>
+                            <li class="flex items-start gap-2"><span class="text-[#9d00ff]">✓</span> Equipo de sonido premium</li>
+                            <li class="flex items-start gap-2"><span class="text-[#9d00ff]">✓</span> Repertorio personalizado</li>
+                            <li class="flex items-start gap-2"><span class="text-[#9d00ff]">✓</span> Iluminación + efectos</li>
+                        </ul>
+                        <a href="https://wa.me/56990165899?text=Hola%2C%20me%20interesa%20el%20paquete%20Premium" target="_blank" class="block w-full py-3 bg-[#9d00ff]/20 border border-[#9d00ff]/40 rounded-full text-[#9d00ff] font-semibold hover:bg-[#9d00ff]/30 transition-all">Consultar</a>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 text-sm mt-6">* Precios referenciales. La cotización final depende de la ubicación, duración y requisitos específicos del evento.</p>
+            </div>
             
             <div class="bg-[#160f2e] rounded-2xl p-8 border border-[#00f3ff]/30">
                 <h3 class="text-2xl font-bold text-gold mb-6 text-center">Nuestro Repertorio</h3>
@@ -445,6 +570,15 @@
                 <p class="text-gray-400 text-lg">Consulta nuestra disponibilidad y próximos eventos</p>
             </div>
             <div id="calendar-container"></div>
+            <div id="event-map" class="mt-8 rounded-2xl overflow-hidden border border-[#00f3ff]/20" style="display:none;">
+                <div class="bg-[#160f2e] px-6 py-4 border-b border-[#00f3ff]/20">
+                    <h3 class="text-lg font-bold text-gold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#00f3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span id="map-title">Ubicación del evento</span>
+                    </h3>
+                </div>
+                <iframe id="map-iframe" width="100%" height="300" style="border:0;" loading="lazy" allowfullscreen></iframe>
+            </div>
         </div>
     </section>
 
@@ -548,6 +682,12 @@
     <script src="js/chatbot-v2.js"></script>
     <script src="js/calendar.js"></script>
     <script src="js/counter.js"></script>
+    <script src="js/hero-carousel.js"></script>
+    <script src="js/theme-toggle.js"></script>
+    <script src="js/enhancements.js"></script>
+    <script src="js/faq.js"></script>
+    <script src="js/contact-form.js"></script>
+    <script src="js/audio-player.js"></script>
     <script>
         // Load hero configuration from hero_config.json
         (async function loadHeroConfig() {
