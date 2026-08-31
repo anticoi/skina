@@ -155,6 +155,24 @@
       "title": "Skina Cartoon",
       "description": "Cartoon Skina",
       "filename": "images/gemini_generated_image_8sun7k8sun7k8sun.jpeg"
+    },
+    {
+      "id": 27,
+      "title": "La Skina - Documento Página 1",
+      "description": "Información de La Skina",
+      "filename": "la_skina_pdf-1.jpg"
+    },
+    {
+      "id": 28,
+      "title": "La Skina - Documento Página 2",
+      "description": "Información de La Skina",
+      "filename": "la_skina_pdf-2.jpg"
+    },
+    {
+      "id": 29,
+      "title": "La Skina - Documento Página 3",
+      "description": "Información de La Skina",
+      "filename": "la_skina_pdf-3.jpg"
     }
   ]
 }
