@@ -16,3 +16,4 @@ package-lock.json
 # Build files (if using build tools)
 dist/
 build/
+.vercel
