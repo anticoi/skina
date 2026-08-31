@@ -317,11 +317,12 @@
        4. MUSICIAN PROFILES SECTION
        ============================================================ */
     const MUSICIANS = [
-        { img: 'images/IMG_1935.jpg', name: 'El Jefe',       instrument: 'Batería' },
-        { img: 'images/IMG_1940.jpg', name: 'El Maestro',    instrument: 'Guitarra' },
-        { img: 'images/IMG_1950.jpg', name: 'La Voz',        instrument: 'Voz Principal' },
-        { img: 'images/IMG_1961.jpg', name: 'El Bajista',    instrument: 'Bajo' },
-        { img: 'images/IMG_1970.jpg', name: 'El Tecladista', instrument: 'Teclados' }
+        { img: 'images/victorbateria.jpg',   name: 'El Jefe',       instrument: 'Batería' },
+        { img: 'images/Rodolfo_guitarra.jpg', name: 'El Maestro',    instrument: 'Guitarra' },
+        { img: 'images/German_cantante.jpg',  name: 'La Voz',        instrument: 'Voz Principal' },
+        { img: 'images/Fernando_bajo.jpg',    name: 'El Bajista',    instrument: 'Bajo' },
+        { img: 'images/Jorge_teclados.jpg',   name: 'El Tecladista', instrument: 'Teclados' },
+        { img: 'images/Lolo_saxofon.jpg',     name: 'Lolo',          instrument: 'Saxofón' }
     ];
 
     function createMusiciansSection() {
