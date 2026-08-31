@@ -2,6 +2,151 @@
 // Configuración del número de WhatsApp
 const WHATSAPP_NUMBER = '56990165899';
 
+// Lista de artistas que toca La Skina
+const artistasSkina = [
+    'earth wind and fire', 'earth wind', 'ewf',
+    'michael jackson', 'mj',
+    'madonna',
+    'prince',
+    'duran duran',
+    'depeche mode',
+    'new order',
+    'the cure',
+    'a ha', 'a-ha',
+    'tears for fears',
+    'spandau ballet',
+    'culture club',
+    'wham', 'george michael',
+    'phil collins', 'genesis',
+    'police', 'sting',
+    'u2',
+    'queen',
+    'bryan adams',
+    'bon jovi',
+    'def leppard',
+    'guns n roses', 'guns n\' roses',
+    'aerosmith',
+    'ac dc', 'ac/dc',
+    'journey',
+    'toto',
+    'chicago',
+    'steve wonder', 'stevie wonder',
+    'lionel richie',
+    'billy ocean',
+    'rick astley',
+    'whitney houston',
+    'lionel richie',
+    'barry manilow',
+    'elton john',
+    'billy joel',
+    'rod stewart',
+    'joe cocker',
+    'eric clapton',
+    'dire straits',
+    'europe',
+    'foreigner',
+    'reo speedwagon',
+    'styx',
+    'supertramp',
+    'pink floyd',
+    'led zeppelin',
+    'deep purple',
+    'scorpions',
+    'soda stereo',
+    'virus',
+    'los abuelos de la nada',
+    'miguel mateos', 'miguel mateos zas',
+    'charly garcia', 'charly garcía',
+    'spinetta', 'invisible',
+    'sumo',
+    'los redonditos de ricota', 'indio solari',
+    'patricio rey',
+    'fito paez',
+    'luis alberto spinetta',
+    'mana', 'maná',
+    'santana',
+    'enrique bunbury',
+    'hombres g',
+    'los secretos',
+    'el ultimo de la fila', 'el último de la fila',
+    'gabinete caligari',
+    'loquillo',
+    'antonio flores',
+    'roberto carlos',
+    'camilo sesto',
+    'jose jose',
+    'luis miguel',
+    'juan luis guerra',
+    'manuel mijares',
+    'emmanuel',
+    'ricardo arjona',
+    'julio iglesias',
+    'enrique iglesias',
+    'chayanne',
+    'ricky martin',
+    'gloria estefan', 'miami sound machine',
+    'celia cruz',
+    'selenas',
+    'thalia', 'thalía'
+];
+
+// Lista de canciones populares que tocan
+const cancionesSkina = [
+    'september', 'boogie wonderland',
+    'billie jean', 'thriller', 'beat it',
+    'like a virgin', 'material girl',
+    'purple rain',
+    'sweet dreams',
+    'don\'t you forget about me',
+    'take on me',
+    'everybody wants to rule the world',
+    'true',
+    'karma chameleon',
+    'wake me up before you go go',
+    'in the air tonight',
+    'every breath you take',
+    'with or without you',
+    'bohemian rhapsody', 'we will rock you',
+    'summer of 69',
+    'livin on a prayer',
+    'pour some sugar on me',
+    'sweet child o mine',
+    'i don\'t want to miss a thing',
+    'africa',
+    'hard to say i\'m sorry',
+    'superstition',
+    'all night long',
+    'caribbean queen',
+    'never gonna give you up',
+    'i wanna dance with somebody',
+    'your song',
+    'piano man',
+    'sultans of swing',
+    'the final countdown',
+    'i want to know what love is',
+    'keep on loving you',
+    'come sail away',
+    'another brick in the wall',
+    'stairway to heaven',
+    'smoke on the water',
+    'rock you like a hurricane',
+    'de musica ligera',
+    'lamento boliviano',
+    'en la ciudad de la furia',
+    'costumbres argentinas',
+    'mi primer dia sin ti',
+    'devuelveme a mi chica',
+    'noches de bohemia',
+    'la flaca',
+    'el 28',
+    'tu jardin con enanitos',
+    'la camisa negra',
+    'bailando',
+    'vivir mi vida',
+    'la bilirrubina',
+    'el precio de mi cabeza'
+];
+
 // Base de conocimiento del chatbot
 const chatbotKnowledge = [
     {
@@ -16,7 +161,7 @@ const chatbotKnowledge = [
     },
     {
         keywords: ['repertorio', 'canciones', 'musica', 'temas', 'playlist', 'que tocan', 'que tocan'],
-        response: 'Nuestro repertorio incluye: Clásicos de los 80, Pop/Rock Retro, Baladas del Recuerdo, Ritmos de Época, Disco, New Wave, Rock en Español y Pop Latino. ¡Tenemos más de 100 clásicos en nuestro repertorio! ¿Quieres saber si tocamos alguna canción en particular?',
+        response: 'Nuestro repertorio incluye: Clásicos de los 80, Pop/Rock Retro, Baladas del Recuerdo, Ritmos de Época, Disco, New Wave, Rock en Español y Pop Latino. ¡Tenemos más de 100 clásicos en nuestro repertorio! ¿Quieres saber si tocamos alguna canción o artista en particular?',
         action: 'none'
     },
     {
@@ -78,6 +223,65 @@ const defaultResponse = 'No estoy seguro de entender tu pregunta. Puedo ayudarte
 // Buscar la mejor respuesta
 function findResponse(message) {
     const lowerMessage = message.toLowerCase();
+
+    // 1. Detectar preguntas sobre artistas o canciones específicas
+    // Patrones: "se saben X", "tocan X", "conocen X", "tienen X", "saben tocar X"
+    const patronesPregunta = [
+        'se saben', 'saben tocar', 'tocan', 'conocen', 'tienen',
+        'saben', 'tocan la cancion', 'tocan el tema', 'tienen en el repertorio',
+        'cantan', 'interpretan', 'tienen la cancion', 'tienen el tema',
+        'saben la cancion', 'saben el tema', 'reper'
+    ];
+
+    for (const patron of patronesPregunta) {
+        if (lowerMessage.includes(patron)) {
+            // Buscar si menciona un artista que tocamos
+            for (const artista of artistasSkina) {
+                if (lowerMessage.includes(artista)) {
+                    return {
+                        response: `¡Sí! Tocamos a ${artista.toUpperCase()} en nuestro repertorio 🎵. Es parte de los clásicos que interpretamos en nuestros shows. ¿Quieres reservar un evento o consultar por más canciones?`,
+                        action: 'whatsapp'
+                    };
+                }
+            }
+            // Buscar si menciona una canción que tocamos
+            for (const cancion of cancionesSkina) {
+                if (lowerMessage.includes(cancion)) {
+                    return {
+                        response: `¡Sí! "${cancion.charAt(0).toUpperCase() + cancion.slice(1)}" está en nuestro repertorio 🎵. La tocamos regularmente en nuestros shows. ¿Quieres reservar un evento o consultar por más canciones?`,
+                        action: 'whatsapp'
+                    };
+                }
+            }
+            // Si preguntan por algo que no reconocemos
+            return {
+                response: 'Ese artista/canción no lo tengo confirmado en nuestra lista, pero estamos siempre ampliando el repertorio. Te recomiendo consultarlo directamente por WhatsApp, ahí te confirmamos rápido. ¿Quieres abrir WhatsApp?',
+                action: 'whatsapp'
+            };
+        }
+    }
+
+    // 2. Buscar artista mencionado directamente (sin verbo de pregunta)
+    for (const artista of artistasSkina) {
+        if (lowerMessage.includes(artista)) {
+            return {
+                response: `¡Sí! Tocamos a ${artista.toUpperCase()} en nuestro repertorio 🎵. Es parte de los clásicos que interpretamos. ¿Quieres reservar un evento o saber más?`,
+                action: 'whatsapp'
+            };
+        }
+    }
+
+    // 3. Buscar canción mencionada directamente
+    for (const cancion of cancionesSkina) {
+        if (lowerMessage.includes(cancion)) {
+            return {
+                response: `¡Sí! "${cancion.charAt(0).toUpperCase() + cancion.slice(1)}" está en nuestro repertorio 🎵. ¿Quieres reservar un evento o saber más?`,
+                action: 'whatsapp'
+            };
+        }
+    }
+
+    // 4. Búsqueda normal en la base de conocimiento
     let bestMatch = null;
     let maxMatches = 0;
 
