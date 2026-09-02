@@ -233,7 +233,7 @@
     function createWhatsAppButton() {
         const link = document.createElement('a');
         link.className = 'whatsapp-fab';
-        link.href = 'https://wa.me/56990165899?text=Hola%2C%20vengo%20del%20sitio%20web%20de%20La%20Skina';
+        link.href = 'https://wa.me/56952195484?text=Hola%2C%20vengo%20del%20sitio%20web%20de%20La%20Skina';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.setAttribute('aria-label', 'Escríbenos por WhatsApp');

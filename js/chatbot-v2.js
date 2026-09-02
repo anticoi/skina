@@ -1,6 +1,6 @@
 // Chatbot para La Skina - Respuestas predefinidas + WhatsApp
 // Configuración del número de WhatsApp
-const WHATSAPP_NUMBER = '56990165899';
+const WHATSAPP_NUMBER = '56952195484';
 
 // Lista de artistas que toca La Skina
 const artistasSkina = [

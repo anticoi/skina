@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    const WHATSAPP_NUMBER = '56990165899';
+    const WHATSAPP_NUMBER = '56952195484';
     const EMAIL_ADDRESS = 'anticoi@gmail.com';
 
     document.addEventListener('DOMContentLoaded', function () {
