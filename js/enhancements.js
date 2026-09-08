@@ -319,7 +319,7 @@
     const MUSICIANS = [
         { img: 'images/victorbateria.jpg',    name: 'Víctor López',      instrument: 'Batería, Director Manager' },
         { img: 'images/Rodolfo_guitarra.jpg', name: 'Rodolfo Méndez',    instrument: 'Guitarra' },
-        { img: 'images/German_cantante.jpg',  name: 'Germán Rivero',     instrument: 'Cantante' },
+        { img: 'images/German_cantante.jpg',  name: 'Germán Riveros',    instrument: 'Cantante' },
         { img: 'images/Fernando_bajo.jpg',    name: 'Fernando Islas',    instrument: 'Bajo, Director Musical' },
         { img: 'images/Jorge_teclados.jpg',   name: 'Jorge Anticoi',     instrument: 'Teclados, Sonido y Tecnología' },
         { img: 'images/Lolo_saxofon.jpg',     name: 'Lolo González',     instrument: 'Saxofón' }
