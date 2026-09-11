@@ -412,6 +412,25 @@ function findResponse(message) {
     return { response: defaultResponse, action: defaultAction };
 }
 
+// Consultar a Gemini cuando no hay respuesta predefinida
+async function getGeminiResponse(message) {
+    try {
+        const res = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.reply) {
+            throw new Error(data.error || 'Respuesta vacía');
+        }
+        return data.reply;
+    } catch (err) {
+        console.error('Error Gemini:', err);
+        return 'Perdón, no pude conectar con la IA en este momento. ¿Quieres que te contactemos por WhatsApp?';
+    }
+}
+
 // Ejecutar acción (abrir WhatsApp, scroll, etc.)
 function executeAction(action) {
     switch (action) {
@@ -593,7 +612,7 @@ function createChatbot() {
     const input = document.getElementById('chatbot-input');
     const sendBtn = document.getElementById('chatbot-send');
 
-    function sendMessage() {
+    async function sendMessage() {
         const text = input.value.trim();
         if (!text) return;
 
@@ -601,11 +620,19 @@ function createChatbot() {
         addMessage(text, 'user');
         input.value = '';
 
-        // Bot response after short delay
-        setTimeout(() => {
-            const { response, action } = findResponse(text);
+        // Loading indicator
+        const loading = addMessage('Escribiendo...', 'bot');
+
+        const { response, action } = findResponse(text);
+
+        if (response === defaultResponse) {
+            const geminiResponse = await getGeminiResponse(text);
+            loading.remove();
+            addMessage(geminiResponse, 'bot', 'whatsapp');
+        } else {
+            loading.remove();
             addMessage(response, 'bot', action);
-        }, 500);
+        }
     }
 
     sendBtn.addEventListener('click', sendMessage);
@@ -663,6 +690,7 @@ function addMessage(text, sender, action) {
 
     // Auto scroll
     messages.scrollTop = messages.scrollHeight;
+    return msgDiv;
 }
 
 // Initialize chatbot when DOM is ready

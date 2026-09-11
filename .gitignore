@@ -17,3 +17,7 @@ package-lock.json
 dist/
 build/
 .vercel
+
+# Environment variables
+.env
+.env.local

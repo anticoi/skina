@@ -1,0 +1,11 @@
+{
+  "name": "la-skina-web",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "test:api": "node -c api/gemini.js"
+  }
+}
