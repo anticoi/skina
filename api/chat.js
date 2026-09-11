@@ -3,16 +3,26 @@ function sendJson(res, statusCode, data) {
     res.end(JSON.stringify(data));
 }
 
-async function callGeminiModel(modelName, apiKey, prompt) {
+const SYSTEM_INSTRUCTION = `Eres el asistente virtual de La Skina, una banda chilena de música ochentera, del recuerdo, pop, rock, baladas y disco. Respondes de forma breve, amigable y en español de Chile.
+
+Reglas:
+- Si preguntan por cotizaciones, reservas, disponibilidad o precios, responde con una frase breve y sugiere contactar por WhatsApp.
+- Si preguntan por canciones o repertorio, menciona que La Skina toca clásicos de los 80, pop/rock retro, baladas, disco y rock en español.
+- Si preguntan por eventos, menciona eventos privados, corporativos, pubs/bares y bodas.
+- No inventes fechas, precios exactos ni datos no confirmados.
+- Si no sabes la respuesta, sugiere contactar por WhatsApp.`;
+
+async function callGemini(modelName, apiKey, userMessage) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 55000);
+    const timeoutId = setTimeout(() => controller.abort(), 50000);
 
     try {
         const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                systemInstruction: { role: 'user', parts: [{ text: SYSTEM_INSTRUCTION }] },
+                contents: [{ role: 'user', parts: [{ text: userMessage }] }],
                 generationConfig: { maxOutputTokens: 250, temperature: 0.6 }
             }),
             signal: controller.signal
@@ -56,7 +66,6 @@ module.exports = async (req, res) => {
         return;
     }
 
-    // Parse JSON body
     const buffers = [];
     for await (const chunk of req) {
         buffers.push(chunk);
@@ -70,44 +79,23 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const userMessage = payload.message;
-    if (!userMessage || typeof userMessage !== 'string') {
+    const message = payload.message;
+    if (!message || typeof message !== 'string') {
         sendJson(res, 400, { error: 'message es requerido' });
         return;
     }
 
-    const systemPrompt = `Eres el asistente virtual de La Skina, una banda chilena de música ochentera, del recuerdo, pop, rock, baladas y disco. Respondes de forma breve, amigable y en español (Chile).
-
-Reglas:
-- Si preguntan por cotizaciones, reservas, disponibilidad o precios, responde con una frase breve y sugiere contactar por WhatsApp.
-- Si preguntan por canciones o repertorio, menciona que La Skina toca clásicos de los 80, pop/rock retro, baladas, disco y rock en español.
-- Si preguntan por eventos, menciona eventos privados, corporativos, pubs/bares y bodas.
-- No inventes fechas, precios exactos ni datos no confirmados.
-- Si no sabes la respuesta, sugiere contactar por WhatsApp.
-
-Mensaje del usuario: ${userMessage}`;
-
-    // Intentar con varios modelos en orden
-    const models = [
-        'gemini-2.5-flash',
-        'gemini-2.5-pro',
-        'gemini-flash-latest',
-        'gemini-pro-latest',
-        'gemini-1.5-flash',
-        'gemini-1.5-pro'
-    ];
-
-    let lastError = 'No se pudo generar respuesta con ningún modelo.';
+    const models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+    let lastError = 'No se pudo generar una respuesta.';
 
     for (const model of models) {
         try {
-            const reply = await callGeminiModel(model, apiKey, systemPrompt);
+            const reply = await callGemini(model, apiKey, message);
             sendJson(res, 200, { reply });
             return;
         } catch (err) {
             lastError = err.message;
-            console.error(`Gemini model ${model} failed:`, err.message);
-            // continuar con el siguiente modelo
+            console.error(`Gemini ${model} failed:`, err.message);
         }
     }
 

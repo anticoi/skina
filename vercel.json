@@ -1,8 +1,11 @@
 {
   "version": 2,
   "functions": {
+    "api/chat.js": {
+      "maxDuration": 60
+    },
     "api/gemini.js": {
-      "maxDuration": 10
+      "maxDuration": 60
     }
   }
 }
