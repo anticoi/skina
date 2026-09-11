@@ -3,6 +3,29 @@ function sendJson(res, statusCode, data) {
     res.end(JSON.stringify(data));
 }
 
+async function callGeminiModel(modelName, apiKey, prompt) {
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { maxOutputTokens: 250, temperature: 0.6 }
+        })
+    });
+
+    const data = await geminiRes.json();
+
+    if (!geminiRes.ok) {
+        throw new Error(data?.error?.message || JSON.stringify(data));
+    }
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+        throw new Error('Respuesta vacía de Gemini');
+    }
+    return text.trim();
+}
+
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -56,30 +79,29 @@ Reglas:
 
 Mensaje del usuario: ${userMessage}`;
 
-    try {
-        const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
-                generationConfig: { maxOutputTokens: 200, temperature: 0.6 }
-            })
-        });
+    // Intentar con varios modelos en orden
+    const models = [
+        'gemini-1.5-flash',
+        'gemini-1.5-flash-latest',
+        'gemini-1.5-pro',
+        'gemini-1.5-pro-latest',
+        'gemini-pro',
+        'gemini-1.0-pro'
+    ];
 
-        const data = await geminiRes.json();
+    let lastError = 'No se pudo generar respuesta con ningún modelo.';
 
-        if (!geminiRes.ok) {
-            console.error('Gemini error:', data);
-            const geminiMessage = data?.error?.message || JSON.stringify(data);
-            sendJson(res, 500, { error: 'Error al consultar Gemini', details: geminiMessage });
+    for (const model of models) {
+        try {
+            const reply = await callGeminiModel(model, apiKey, systemPrompt);
+            sendJson(res, 200, { reply });
             return;
+        } catch (err) {
+            lastError = err.message;
+            console.error(`Gemini model ${model} failed:`, err.message);
+            // continuar con el siguiente modelo
         }
-
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        const reply = text ? text.trim() : 'Lo siento, no pude generar una respuesta en este momento.';
-        sendJson(res, 200, { reply });
-    } catch (err) {
-        console.error('Gemini fetch error:', err);
-        sendJson(res, 500, { error: 'Error de conexión con Gemini' });
     }
+
+    sendJson(res, 500, { error: 'Error al consultar Gemini', details: lastError });
 };
