@@ -1,4 +1,4 @@
-const { getChatHistory } = require('./store');
+const { getChatHistory, ensureTable } = require('./store');
 
 function sendJson(res, statusCode, data) {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
@@ -22,9 +22,8 @@ module.exports = async (req, res) => {
     }
 
     // Protección con password simple
-    const authHeader = req.headers.authorization || '';
     const url = new URL(req.url, 'http://localhost');
-    const password = url.searchParams.get('password') || authHeader.replace('Bearer ', '');
+    const password = url.searchParams.get('password') || (req.headers.authorization || '').replace('Bearer ', '');
 
     const adminPassword = process.env.ADMIN_PASSWORD || 'laskina2024';
 
@@ -33,6 +32,9 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const history = getChatHistory();
-    sendJson(res, 200, { count: history.length, logs: history });
+    // Asegurar que la tabla existe
+    await ensureTable();
+
+    const logs = await getChatHistory(500);
+    sendJson(res, 200, { count: logs.length, logs });
 };

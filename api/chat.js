@@ -175,13 +175,13 @@ module.exports = async (req, res) => {
         try {
             const reply = await callGemini(model, apiKey, contextualMessage);
 
-            // Guardar en historial
+            // Guardar en historial (async, no bloquea la respuesta)
             addChatEntry({
                 timestamp: new Date().toISOString(),
                 user: userName || 'Anónimo',
                 message: message,
                 reply: reply
-            });
+            }).catch(err => console.error('Error guardando log:', err.message));
 
             // Reenviar la interacción a WhatsApp del administrador
             sendToWhatsAppAdmin(userName || 'Anónimo', message, reply).catch(err => {
