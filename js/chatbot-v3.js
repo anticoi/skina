@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Chatbot La Skina v3 cargado');
     const WHATSAPP_NUMBER = '56952195484';
     const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, vengo del sitio web de La Skina y me gustaría más información')}`;
 
@@ -33,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             justify-content: center;
             transition: transform 0.2s ease;
         ">
-            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
+            <span style="font-size: 28px; line-height: 1; color: white;">&#9835;</span>
         </button>
 
         <div id="chatbot-window" style="
