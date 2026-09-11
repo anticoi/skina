@@ -21,7 +21,7 @@ async function callGemini(modelName, apiKey, userMessage) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                systemInstruction: { role: 'user', parts: [{ text: SYSTEM_INSTRUCTION }] },
+                systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
                 contents: [{ role: 'user', parts: [{ text: userMessage }] }],
                 generationConfig: { maxOutputTokens: 250, temperature: 0.6 }
             }),
@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+    const models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-3.6-flash', 'gemini-flash-latest'];
     let lastError = 'No se pudo generar una respuesta.';
 
     for (const model of models) {
