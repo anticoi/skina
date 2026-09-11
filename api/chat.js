@@ -1,4 +1,4 @@
-const { addChatEntry } = require('./store');
+const { addChatEntry, ensureTable } = require('./store');
 
 function sendJson(res, statusCode, data) {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
@@ -168,6 +168,9 @@ module.exports = async (req, res) => {
         ? `El usuario se llama ${userName}. ${message}`
         : message;
 
+    // Asegurar que la tabla existe antes de guardar
+    await ensureTable();
+
     const models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-3.6-flash', 'gemini-flash-latest'];
     let lastError = 'No se pudo generar una respuesta.';
 
@@ -182,8 +185,6 @@ module.exports = async (req, res) => {
                 message: message,
                 reply: reply
             }).catch(err => console.error('Error guardando log:', err.message));
-
-            // Reenviar la interacción a WhatsApp del administrador
             sendToWhatsAppAdmin(userName || 'Anónimo', message, reply).catch(err => {
                 console.error('Error enviando a WhatsApp admin:', err.message);
             });
