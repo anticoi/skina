@@ -22,10 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {
         '#chatbot-loading.visible { display: flex; }' +
         '#chatbot-input-area { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; }' +
         '#chatbot-input { flex: 1; background: #0d081d; border: 1px solid rgba(255,0,127,0.3); border-radius: 8px; padding: 10px 14px; color: white; font-size: 14px; outline: none; }' +
+        '#chatbot-input:disabled { opacity: 0.5; }' +
         '#chatbot-send { background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); border: none; border-radius: 8px; padding: 10px 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }' +
+        '#chatbot-send:disabled { opacity: 0.5; cursor: not-allowed; }' +
+        '#chatbot-captcha-area { padding: 12px 16px; background: rgba(157,0,255,0.1); border-top: 1px solid rgba(157,0,255,0.3); display: none; flex-direction: column; gap: 8px; }' +
+        '#chatbot-captcha-area.visible { display: flex; }' +
+        '#chatbot-captcha-label { color: #9d00ff; font-size: 13px; font-weight: 600; }' +
+        '#chatbot-captcha-row { display: flex; gap: 8px; align-items: center; }' +
+        '#chatbot-captcha-input { flex: 1; background: #0d081d; border: 1px solid rgba(157,0,255,0.4); border-radius: 8px; padding: 8px 12px; color: white; font-size: 14px; outline: none; }' +
+        '#chatbot-captcha-btn { background: #9d00ff; border: none; border-radius: 8px; padding: 8px 16px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; }' +
         '#chatbot-wa-area { padding: 10px 12px; background: rgba(13,8,29,0.8); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }' +
         '#chatbot-wa-btn { display: inline-flex; align-items: center; gap: 6px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }';
     document.head.appendChild(style);
+
+    // === STATE ===
+    var sessionToken = null;
+    var captchaId = null;
+    var chatOpened = false;
 
     // === BUTTON ===
     var toggle = document.createElement('button');
@@ -49,9 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
             '<div class="chatbot-msg-bot">&#161;Hola! Soy el asistente virtual de La Skina &#127925;. &#191;En qu&#233; te puedo ayudar?</div>' +
         '</div>' +
         '<div id="chatbot-loading"><span style="display:inline-block;width:8px;height:8px;background:#00f3ff;border-radius:50%;animation:chatbot-pulse 1s infinite;"></span> La Skina est&#225; escribiendo...</div>' +
+        '<div id="chatbot-captcha-area">' +
+            '<div id="chatbot-captcha-label"></div>' +
+            '<div id="chatbot-captcha-row">' +
+                '<input id="chatbot-captcha-input" type="number" placeholder="Tu respuesta" autocomplete="off">' +
+                '<button id="chatbot-captcha-btn">Verificar</button>' +
+            '</div>' +
+        '</div>' +
         '<div id="chatbot-input-area">' +
-            '<input id="chatbot-input" type="text" placeholder="Escribe tu mensaje..." autocomplete="off">' +
-            '<button id="chatbot-send" aria-label="Enviar"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg></button>' +
+            '<input id="chatbot-input" type="text" placeholder="Escribe tu mensaje..." autocomplete="off" disabled>' +
+            '<button id="chatbot-send" aria-label="Enviar" disabled><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg></button>' +
         '</div>' +
         '<div id="chatbot-wa-area">' +
             '<a id="chatbot-wa-btn" href="' + WHATSAPP_URL + '" target="_blank"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.821 11.821 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Hablar por WhatsApp</a>' +
@@ -64,10 +84,75 @@ document.addEventListener('DOMContentLoaded', () => {
     var sendBtn = document.getElementById('chatbot-send');
     var messages = document.getElementById('chatbot-messages');
     var loading = document.getElementById('chatbot-loading');
+    var captchaArea = document.getElementById('chatbot-captcha-area');
+    var captchaLabel = document.getElementById('chatbot-captcha-label');
+    var captchaInput = document.getElementById('chatbot-captcha-input');
+    var captchaBtn = document.getElementById('chatbot-captcha-btn');
+
+    // === CAPTCHA ===
+    async function fetchCaptcha() {
+        try {
+            var res = await fetch('/api/chat');
+            var data = await res.json();
+            if (data.id && data.question) {
+                captchaId = data.id;
+                captchaLabel.textContent = '🤖 Verificación: ' + data.question;
+                captchaArea.classList.add('visible');
+                captchaInput.value = '';
+                captchaInput.focus();
+            }
+        } catch (err) {
+            console.error('Error fetching captcha:', err);
+        }
+    }
+
+    async function verifyCaptcha() {
+        var answer = captchaInput.value.trim();
+        if (!answer) return;
+        captchaBtn.disabled = true;
+        try {
+            var res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    verifyCaptcha: true,
+                    captchaId: captchaId,
+                    captchaAnswer: parseInt(answer, 10)
+                })
+            });
+            var data = await res.json();
+            if (res.ok && data.verified && data.token) {
+                sessionToken = data.token;
+                captchaArea.classList.remove('visible');
+                input.disabled = false;
+                sendBtn.disabled = false;
+                input.focus();
+            } else if (data.captcha) {
+                captchaId = data.captcha.id;
+                captchaLabel.textContent = '❌ Incorrecto. ' + data.captcha.question;
+                captchaInput.value = '';
+            }
+        } catch (err) {
+            console.error('Error verifying captcha:', err);
+        } finally {
+            captchaBtn.disabled = false;
+        }
+    }
+
+    captchaBtn.addEventListener('click', verifyCaptcha);
+    captchaInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') verifyCaptcha();
+    });
 
     // === EVENTS ===
     toggle.addEventListener('click', function () {
         win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+        if (win.style.display === 'flex' && !chatOpened) {
+            chatOpened = true;
+            if (!sessionToken) {
+                fetchCaptcha();
+            }
+        }
     });
     closeBtn.addEventListener('click', function () {
         win.style.display = 'none';
@@ -83,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function sendMessage() {
         var text = input.value.trim();
-        if (!text) return;
+        if (!text || !sessionToken) return;
         addMessage(text, 'user');
         input.value = '';
         loading.classList.add('visible');
@@ -91,11 +176,28 @@ document.addEventListener('DOMContentLoaded', () => {
             var res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify({
+                    message: text,
+                    token: sessionToken
+                })
             });
             var data = await res.json();
-            if (!res.ok || !data.reply) throw new Error(data.error || 'Error');
-            addMessage(data.reply, 'bot');
+            if (!res.ok) {
+                if (data.captcha) {
+                    sessionToken = null;
+                    captchaId = data.captcha.id;
+                    captchaLabel.textContent = '🤖 ' + data.captcha.question;
+                    captchaArea.classList.add('visible');
+                    input.disabled = true;
+                    sendBtn.disabled = true;
+                    captchaInput.value = '';
+                    captchaInput.focus();
+                } else {
+                    throw new Error(data.error || 'Error');
+                }
+            } else if (data.reply) {
+                addMessage(data.reply, 'bot');
+            }
         } catch (err) {
             console.error('Chat error:', err);
             addMessage('Perd\u00f3n, no pude conectar con la IA en este momento. Puedes escribirnos por WhatsApp.', 'bot');
