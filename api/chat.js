@@ -172,6 +172,12 @@ module.exports = async (req, res) => {
     for (const model of models) {
         try {
             const reply = await callGemini(model, apiKey, contextualMessage);
+
+            // Reenviar la interacción a WhatsApp del administrador
+            sendToWhatsAppAdmin(userName || 'Anónimo', message, reply).catch(err => {
+                console.error('Error enviando a WhatsApp admin:', err.message);
+            });
+
             sendJson(res, 200, { reply });
             return;
         } catch (err) {
@@ -182,3 +188,36 @@ module.exports = async (req, res) => {
 
     sendJson(res, 500, { error: 'Error al consultar Gemini', details: lastError });
 };
+
+// Reenviar interacción del chatbot al WhatsApp del administrador
+async function sendToWhatsAppAdmin(userName, userMessage, botReply) {
+    const adminToken = process.env.WHATSAPP_ADMIN_TOKEN;
+    const adminPhoneId = process.env.WHATSAPP_ADMIN_PHONE_ID;
+    const adminNumber = process.env.WHATSAPP_ADMIN_NUMBER || '56952195484';
+
+    // Si no hay token de WhatsApp Business API, usar enlace simple (log)
+    if (!adminToken || !adminPhoneId) {
+        console.log(`[CHAT] ${userName}: ${userMessage} → ${botReply}`);
+        return;
+    }
+
+    const text = `💬 *Nuevo chat - La Skina*\n👤 Usuario: ${userName}\n❓ Pregunta: ${userMessage}\n🤖 Respuesta: ${botReply}`;
+
+    try {
+        await fetch(`https://graph.facebook.com/v18.0/${adminPhoneId}/messages`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${adminToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messaging_product: 'whatsapp',
+                to: adminNumber,
+                type: 'text',
+                text: { body: text }
+            })
+        });
+    } catch (err) {
+        console.error('WhatsApp admin send error:', err.message);
+    }
+}
