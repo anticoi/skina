@@ -159,12 +159,18 @@ module.exports = async (req, res) => {
         return;
     }
 
+    // Incluir el nombre del usuario en el contexto si está disponible
+    const userName = payload.name;
+    const contextualMessage = userName
+        ? `El usuario se llama ${userName}. ${message}`
+        : message;
+
     const models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-3.6-flash', 'gemini-flash-latest'];
     let lastError = 'No se pudo generar una respuesta.';
 
     for (const model of models) {
         try {
-            const reply = await callGemini(model, apiKey, message);
+            const reply = await callGemini(model, apiKey, contextualMessage);
             sendJson(res, 200, { reply });
             return;
         } catch (err) {

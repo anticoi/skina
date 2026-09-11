@@ -25,12 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
         '#chatbot-input:disabled { opacity: 0.5; }' +
         '#chatbot-send { background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); border: none; border-radius: 8px; padding: 10px 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }' +
         '#chatbot-send:disabled { opacity: 0.5; cursor: not-allowed; }' +
-        '#chatbot-captcha-area { padding: 12px 16px; background: rgba(157,0,255,0.1); border-top: 1px solid rgba(157,0,255,0.3); display: none; flex-direction: column; gap: 8px; }' +
+        '#chatbot-captcha-area { padding: 12px 16px; background: rgba(157,0,255,0.1); border-top: 1px solid rgba(157,0,255,0.3); display: none; flex-direction: column; gap: 10px; }' +
         '#chatbot-captcha-area.visible { display: flex; }' +
         '#chatbot-captcha-label { color: #9d00ff; font-size: 13px; font-weight: 600; }' +
+        '#chatbot-name-input { background: #0d081d; border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; padding: 8px 12px; color: white; font-size: 14px; outline: none; }' +
         '#chatbot-captcha-row { display: flex; gap: 8px; align-items: center; }' +
         '#chatbot-captcha-input { flex: 1; background: #0d081d; border: 1px solid rgba(157,0,255,0.4); border-radius: 8px; padding: 8px 12px; color: white; font-size: 14px; outline: none; }' +
-        '#chatbot-captcha-btn { background: #9d00ff; border: none; border-radius: 8px; padding: 8px 16px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; }' +
+        '#chatbot-captcha-btn { background: #9d00ff; border: none; border-radius: 8px; padding: 8px 16px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }' +
         '#chatbot-wa-area { padding: 10px 12px; background: rgba(13,8,29,0.8); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }' +
         '#chatbot-wa-btn { display: inline-flex; align-items: center; gap: 6px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }';
     document.head.appendChild(style);
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === STATE ===
     var sessionToken = null;
     var captchaId = null;
+    var userName = null;
     var chatOpened = false;
 
     // === BUTTON ===
@@ -59,14 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
             '<button id="chatbot-close" aria-label="Cerrar chat"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>' +
         '</div>' +
         '<div id="chatbot-messages">' +
-            '<div class="chatbot-msg-bot">&#161;Hola! Soy el asistente virtual de La Skina &#127925;. &#191;En qu&#233; te puedo ayudar?</div>' +
+            '<div class="chatbot-msg-bot">&#161;Hola! Soy el asistente virtual de La Skina &#127925;. Para comenzar, cu\u00e9ntanos tu nombre y resuelve la verificaci\u00f3n.</div>' +
         '</div>' +
         '<div id="chatbot-loading"><span style="display:inline-block;width:8px;height:8px;background:#00f3ff;border-radius:50%;animation:chatbot-pulse 1s infinite;"></span> La Skina est&#225; escribiendo...</div>' +
         '<div id="chatbot-captcha-area">' +
             '<div id="chatbot-captcha-label"></div>' +
+            '<input id="chatbot-name-input" type="text" placeholder="Tu nombre" autocomplete="off">' +
             '<div id="chatbot-captcha-row">' +
-                '<input id="chatbot-captcha-input" type="number" placeholder="Tu respuesta" autocomplete="off">' +
-                '<button id="chatbot-captcha-btn">Verificar</button>' +
+                '<input id="chatbot-captcha-input" type="number" placeholder="Respuesta del captcha" autocomplete="off">' +
+                '<button id="chatbot-captcha-btn">Iniciar chat</button>' +
             '</div>' +
         '</div>' +
         '<div id="chatbot-input-area">' +
@@ -88,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var captchaLabel = document.getElementById('chatbot-captcha-label');
     var captchaInput = document.getElementById('chatbot-captcha-input');
     var captchaBtn = document.getElementById('chatbot-captcha-btn');
+    var nameInput = document.getElementById('chatbot-name-input');
 
     // === CAPTCHA ===
     async function fetchCaptcha() {
@@ -98,8 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 captchaId = data.id;
                 captchaLabel.textContent = '🤖 Verificación: ' + data.question;
                 captchaArea.classList.add('visible');
+                nameInput.value = '';
                 captchaInput.value = '';
-                captchaInput.focus();
+                nameInput.focus();
             }
         } catch (err) {
             console.error('Error fetching captcha:', err);
@@ -107,9 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function verifyCaptcha() {
+        var name = nameInput.value.trim();
         var answer = captchaInput.value.trim();
-        if (!answer) return;
+        if (!name) {
+            nameInput.style.borderColor = '#ff007f';
+            nameInput.focus();
+            return;
+        }
+        if (!answer) {
+            captchaInput.style.borderColor = '#ff007f';
+            captchaInput.focus();
+            return;
+        }
         captchaBtn.disabled = true;
+        captchaBtn.textContent = 'Verificando...';
         try {
             var res = await fetch('/api/chat', {
                 method: 'POST',
@@ -117,31 +133,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     verifyCaptcha: true,
                     captchaId: captchaId,
-                    captchaAnswer: parseInt(answer, 10)
+                    captchaAnswer: parseInt(answer, 10),
+                    name: name
                 })
             });
             var data = await res.json();
             if (res.ok && data.verified && data.token) {
                 sessionToken = data.token;
+                userName = name;
                 captchaArea.classList.remove('visible');
                 input.disabled = false;
                 sendBtn.disabled = false;
+                // Mensaje de bienvenida personalizado
+                addMessage('¡Hola, ' + name + '! 👋 Ya puedes hacer tus preguntas. ¿En qué te puedo ayudar?', 'bot');
                 input.focus();
             } else if (data.captcha) {
                 captchaId = data.captcha.id;
                 captchaLabel.textContent = '❌ Incorrecto. ' + data.captcha.question;
                 captchaInput.value = '';
+                captchaInput.focus();
             }
         } catch (err) {
             console.error('Error verifying captcha:', err);
         } finally {
             captchaBtn.disabled = false;
+            captchaBtn.textContent = 'Iniciar chat';
         }
     }
 
     captchaBtn.addEventListener('click', verifyCaptcha);
     captchaInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') verifyCaptcha();
+    });
+    nameInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') captchaInput.focus();
     });
 
     // === EVENTS ===
@@ -178,7 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: text,
-                    token: sessionToken
+                    token: sessionToken,
+                    name: userName
                 })
             });
             var data = await res.json();
@@ -190,8 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     captchaArea.classList.add('visible');
                     input.disabled = true;
                     sendBtn.disabled = true;
+                    nameInput.value = '';
                     captchaInput.value = '';
-                    captchaInput.focus();
+                    nameInput.focus();
                 } else {
                     throw new Error(data.error || 'Error');
                 }
