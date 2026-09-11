@@ -70,7 +70,8 @@ Mensaje del usuario: ${userMessage}`;
 
         if (!geminiRes.ok) {
             console.error('Gemini error:', data);
-            sendJson(res, 500, { error: 'Error al consultar Gemini' });
+            const geminiMessage = data?.error?.message || JSON.stringify(data);
+            sendJson(res, 500, { error: 'Error al consultar Gemini', details: geminiMessage });
             return;
         }
 
