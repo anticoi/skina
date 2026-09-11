@@ -346,6 +346,7 @@
             card.className = 'musician-card fade-in';
             card.innerHTML = `
                 <img class="musician-photo" src="${m.img}" alt="${m.name} - ${m.instrument}"
+                     loading="lazy" decoding="async"
                      onerror="this.style.visibility='hidden';">
                 <h3 class="musician-name">${m.name}</h3>
                 <p class="musician-instrument">${m.instrument}</p>
