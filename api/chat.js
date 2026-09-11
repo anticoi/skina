@@ -1,3 +1,5 @@
+const { addChatEntry } = require('./store');
+
 function sendJson(res, statusCode, data) {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(data));
@@ -172,6 +174,14 @@ module.exports = async (req, res) => {
     for (const model of models) {
         try {
             const reply = await callGemini(model, apiKey, contextualMessage);
+
+            // Guardar en historial
+            addChatEntry({
+                timestamp: new Date().toISOString(),
+                user: userName || 'Anónimo',
+                message: message,
+                reply: reply
+            });
 
             // Reenviar la interacción a WhatsApp del administrador
             sendToWhatsAppAdmin(userName || 'Anónimo', message, reply).catch(err => {
