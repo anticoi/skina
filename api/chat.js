@@ -23,7 +23,7 @@ async function callGemini(modelName, apiKey, userMessage) {
             body: JSON.stringify({
                 systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
                 contents: [{ role: 'user', parts: [{ text: userMessage }] }],
-                generationConfig: { maxOutputTokens: 250, temperature: 0.6 }
+                generationConfig: { maxOutputTokens: 800, temperature: 0.6 }
             }),
             signal: controller.signal
         });
