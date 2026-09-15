@@ -17,6 +17,9 @@
         .login button { width: 100%; background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); border: none; border-radius: 8px; padding: 12px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; }
         .login .error { color: #ff007f; text-align: center; margin-top: 12px; font-size: 14px; }
         .dashboard { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+        .tab { flex: 1; background: #160f2e; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; color: #888; font-weight: 600; transition: all 0.2s; }
+        .tab.active { background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); color: white; border-color: transparent; }
         .stats { display: flex; gap: 16px; margin-bottom: 24px; }
         .stat-card { flex: 1; background: #160f2e; border-radius: 12px; padding: 20px; border: 1px solid rgba(0,243,255,0.2); text-align: center; }
         .stat-card .num { font-size: 32px; font-weight: bold; color: #00f3ff; }
@@ -29,12 +32,33 @@
         .log-entry .question { color: #e0e0e0; margin-bottom: 8px; }
         .log-entry .answer { color: #9d00ff; padding-left: 12px; border-left: 2px solid rgba(157,0,255,0.3); }
         .empty { text-align: center; padding: 40px; color: #666; }
+        .event-form { background: #160f2e; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(0,243,255,0.2); }
+        .event-form h3 { color: #00f3ff; margin-bottom: 16px; }
+        .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        .form-field { flex: 1; min-width: 150px; }
+        .form-field label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+        .form-field input, .form-field select { width: 100%; background: #0d081d; border: 1px solid rgba(255,0,127,0.3); border-radius: 8px; padding: 10px 12px; color: white; font-size: 14px; outline: none; }
+        .form-btn { background: linear-gradient(135deg, #ff007f 0%, #9d00ff 100%); border: none; border-radius: 8px; padding: 10px 24px; color: white; font-weight: 600; cursor: pointer; }
+        .form-btn:hover { opacity: 0.9; }
+        .event-entry { background: #160f2e; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .event-entry .info { flex: 1; }
+        .event-entry .date { color: #00f3ff; font-weight: 600; font-size: 14px; }
+        .event-entry .title { color: white; font-weight: 600; margin: 4px 0; }
+        .event-entry .location { color: #888; font-size: 13px; }
+        .event-entry .type-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .type-public { background: rgba(255,0,127,0.2); color: #ff007f; }
+        .type-private { background: rgba(157,0,255,0.2); color: #9d00ff; }
+        .delete-btn { background: rgba(255,0,127,0.2); border: 1px solid rgba(255,0,127,0.4); border-radius: 8px; padding: 8px 12px; color: #ff007f; cursor: pointer; font-size: 13px; }
+        .delete-btn:hover { background: rgba(255,0,127,0.3); }
+        .msg { padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
+        .msg-ok { background: rgba(37,211,102,0.15); color: #25D366; border: 1px solid rgba(37,211,102,0.3); }
+        .msg-err { background: rgba(255,0,127,0.15); color: #ff007f; border: 1px solid rgba(255,0,127,0.3); }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Dashboard La Skina</h1>
-        <p>Panel de administración - Historial del chatbot</p>
+        <p>Panel de administración</p>
     </div>
 
     <div id="login-screen" class="login">
@@ -45,21 +69,66 @@
     </div>
 
     <div id="dashboard-screen" class="dashboard" style="display:none;">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="num" id="total-chats">0</div>
-                <div class="label">Interacciones totales</div>
-            </div>
-            <div class="stat-card">
-                <div class="num" id="unique-users">0</div>
-                <div class="label">Usuarios únicos</div>
-            </div>
+        <div class="tabs">
+            <div class="tab active" id="tab-chats">Historial de Chat</div>
+            <div class="tab" id="tab-events">Agenda / Eventos</div>
         </div>
-        <div class="toolbar">
-            <h2>Historial de conversaciones</h2>
-            <button id="refresh-btn">Actualizar</button>
+
+        <!-- Tab: Chat -->
+        <div id="panel-chats">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="num" id="total-chats">0</div>
+                    <div class="label">Interacciones totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num" id="unique-users">0</div>
+                    <div class="label">Usuarios únicos</div>
+                </div>
+            </div>
+            <div class="toolbar">
+                <h2>Historial de conversaciones</h2>
+                <button id="refresh-btn">Actualizar</button>
+            </div>
+            <div id="logs-container"></div>
         </div>
-        <div id="logs-container"></div>
+
+        <!-- Tab: Eventos -->
+        <div id="panel-events" style="display:none;">
+            <div id="event-msg"></div>
+            <div class="event-form">
+                <h3>Agregar / Editar Evento</h3>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Fecha</label>
+                        <input type="date" id="event-date">
+                    </div>
+                    <div class="form-field">
+                        <label>Título</label>
+                        <input type="text" id="event-title" placeholder="Ej: Golden Music, Boda, Evento Corporativo">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Lugar</label>
+                        <input type="text" id="event-location" placeholder="Dirección o lugar">
+                    </div>
+                    <div class="form-field">
+                        <label>Tipo</label>
+                        <select id="event-type">
+                            <option value="private">Privado</option>
+                            <option value="public">Público</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="form-btn" id="add-event-btn">Guardar Evento</button>
+            </div>
+            <div class="toolbar">
+                <h2>Eventos agendados</h2>
+                <button id="refresh-events-btn">Actualizar</button>
+            </div>
+            <div id="events-container"></div>
+        </div>
     </div>
 
     <script>
@@ -77,7 +146,24 @@
         });
 
         document.getElementById('refresh-btn').addEventListener('click', loadLogs);
+        document.getElementById('refresh-events-btn').addEventListener('click', loadEvents);
 
+        // Tabs
+        document.getElementById('tab-chats').addEventListener('click', function() {
+            document.getElementById('tab-chats').classList.add('active');
+            document.getElementById('tab-events').classList.remove('active');
+            document.getElementById('panel-chats').style.display = 'block';
+            document.getElementById('panel-events').style.display = 'none';
+        });
+        document.getElementById('tab-events').addEventListener('click', function() {
+            document.getElementById('tab-events').classList.add('active');
+            document.getElementById('tab-chats').classList.remove('active');
+            document.getElementById('panel-events').style.display = 'block';
+            document.getElementById('panel-chats').style.display = 'none';
+            loadEvents();
+        });
+
+        // === CHAT LOGS ===
         async function loadLogs() {
             try {
                 var res = await fetch('/api/logs?password=' + encodeURIComponent(adminPassword));
@@ -109,9 +195,7 @@
                     return;
                 }
 
-                // Mostrar de más reciente a más antiguo
-                var logs = data.logs.slice().reverse();
-                logs.forEach(function(log) {
+                (data.logs || []).forEach(function(log) {
                     var div = document.createElement('div');
                     div.className = 'log-entry';
                     var date = new Date(log.timestamp).toLocaleString('es-CL');
@@ -125,6 +209,104 @@
                 document.getElementById('login-error').textContent = 'Error de conexión';
                 console.error(err);
             }
+        }
+
+        // === EVENTS ===
+        async function loadEvents() {
+            try {
+                var res = await fetch('/api/events');
+                var data = await res.json();
+                var container = document.getElementById('events-container');
+                container.innerHTML = '';
+
+                if (!data.events || Object.keys(data.events).length === 0) {
+                    container.innerHTML = '<div class="empty">No hay eventos agendados.</div>';
+                    return;
+                }
+
+                var keys = Object.keys(data.events).sort();
+                keys.forEach(function(key) {
+                    var ev = data.events[key];
+                    var div = document.createElement('div');
+                    div.className = 'event-entry';
+                    var typeLabel = ev.type === 'public' ? 'Público' : 'Privado';
+                    var typeClass = ev.type === 'public' ? 'type-public' : 'type-private';
+                    div.innerHTML =
+                        '<div class="info">' +
+                            '<div class="date">' + formatDate(key) + '</div>' +
+                            '<div class="title">' + escapeHtml(ev.title) + '<span class="type-badge ' + typeClass + '">' + typeLabel + '</span></div>' +
+                            '<div class="location">' + escapeHtml(ev.location || '') + '</div>' +
+                        '</div>' +
+                        '<button class="delete-btn" data-id="' + ev.id + '" data-date="' + key + '">Eliminar</button>';
+                    container.appendChild(div);
+                });
+
+                // Botones eliminar
+                container.querySelectorAll('.delete-btn').forEach(function(btn) {
+                    btn.addEventListener('click', async function() {
+                        if (!confirm('¿Eliminar este evento?')) return;
+                        var id = this.dataset.id;
+                        try {
+                            var res = await fetch('/api/events?id=' + id + '&password=' + encodeURIComponent(adminPassword), { method: 'DELETE' });
+                            if (res.ok) {
+                                showEventMsg('Evento eliminado', 'ok');
+                                loadEvents();
+                            } else {
+                                showEventMsg('Error al eliminar', 'err');
+                            }
+                        } catch (err) {
+                            showEventMsg('Error de conexión', 'err');
+                        }
+                    });
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Agregar evento
+        document.getElementById('add-event-btn').addEventListener('click', async function() {
+            var date = document.getElementById('event-date').value;
+            var title = document.getElementById('event-title').value.trim();
+            var location = document.getElementById('event-location').value.trim();
+            var type = document.getElementById('event-type').value;
+
+            if (!date || !title) {
+                showEventMsg('Fecha y título son obligatorios', 'err');
+                return;
+            }
+
+            try {
+                var res = await fetch('/api/events?password=' + encodeURIComponent(adminPassword), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ date: date, title: title, location: location, type: type })
+                });
+                var data = await res.json();
+                if (res.ok) {
+                    showEventMsg('Evento guardado correctamente', 'ok');
+                    document.getElementById('event-title').value = '';
+                    document.getElementById('event-location').value = '';
+                    loadEvents();
+                } else {
+                    showEventMsg(data.error || 'Error al guardar', 'err');
+                }
+            } catch (err) {
+                showEventMsg('Error de conexión', 'err');
+            }
+        });
+
+        function showEventMsg(text, type) {
+            var el = document.getElementById('event-msg');
+            el.className = 'msg msg-' + type;
+            el.textContent = text;
+            setTimeout(function() { el.className = ''; el.textContent = ''; }, 3000);
+        }
+
+        function formatDate(key) {
+            var parts = key.split('-');
+            var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+            return parts[2] + ' de ' + months[parseInt(parts[1]) - 1] + ' ' + parts[0];
         }
 
         function escapeHtml(text) {

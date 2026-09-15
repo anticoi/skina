@@ -1,8 +1,27 @@
 // Calendario de Reservas - La Skina
 // Muestra fechas ocupadas (histórico) y próximos eventos confirmados
+// Los eventos se cargan desde /api/events (Postgres)
 
-// Configuración de eventos confirmados
-const calendarEvents = {
+let calendarEvents = {};
+let dbEventsLoaded = false;
+
+async function loadDbEvents() {
+    try {
+        const res = await fetch('/api/events');
+        if (res.ok) {
+            const data = await res.json();
+            if (data.events) {
+                calendarEvents = { ...calendarEvents, ...data.events };
+                dbEventsLoaded = true;
+            }
+        }
+    } catch (err) {
+        console.error('Error cargando eventos:', err);
+    }
+}
+
+// Eventos hardcoded (fallback si la API falla)
+const fallbackEvents = {
     '2026-09-12': { title: 'Golden Music', location: 'Golden Music - Av. Irarrázaval 1951, Ñuñoa', type: 'public' },
     '2026-09-17': { title: 'Evento Privado', location: 'Los Andes', type: 'private' },
     '2026-09-19': { title: 'Golden Music', location: 'Golden Music - Av. Irarrázaval 1951, Ñuñoa', type: 'public' }
@@ -266,4 +285,12 @@ function showEventModal(dateKey, event) {
     document.body.appendChild(modal);
 }
 
-document.addEventListener('DOMContentLoaded', renderCalendar);
+document.addEventListener('DOMContentLoaded', async () => {
+    // Cargar eventos desde la API primero
+    await loadDbEvents();
+    // Si no se pudieron cargar, usar fallback
+    if (!dbEventsLoaded) {
+        calendarEvents = { ...fallbackEvents };
+    }
+    renderCalendar();
+});
